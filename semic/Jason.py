@@ -43,9 +43,18 @@ def select_city_postal(address : dict):
         name and post code of the location
     """
     if 'village' in address.keys():
-        return address['village'], address['postcode']
+        city = 'village'
+        if 'postal_code' in address.keys():
+            postal = 'postal_code'
+        else:
+            postal = 'postcode'
     else:
-        return address['city'], address['postcode']
+        city = 'city'
+        if 'postal_code' in address.keys():
+            postal = 'postal_code'
+        else:
+            postal = 'postcode'
+    return address[city], address[postal]
 
 # %% [markdown]
 # ##### Weather with 'meteofrance'
@@ -59,7 +68,7 @@ def find_insee(city, postal):
     Out:
         insee code of this city
     """
-    insee = pd.read_csv('./../data/code_insee.csv', sep = ';')
+    insee = pd.read_csv('./code_insee.csv', sep = ';')
     insee = insee[insee['Commune'] == city.upper()]
     assert len(insee) > 0, "Aucune commune ne correspond à cette recherche"
     code = insee['Code INSEE'][insee['Code Postal'].str.contains(str(postal))].values[0]
@@ -261,7 +270,7 @@ def check_city(coord, reg, city):
     """
     lon = coord[0]
     lat = coord[1]
-    df = pd.read_csv('./../data/historique_meteo.csv', converters = {'villes': eval, 'villes_url': eval, 'coordinates (lat,lon)': eval})
+    df = pd.read_csv('./historique_meteo.csv', converters = {'villes': eval, 'villes_url': eval, 'coordinates (lat,lon)': eval})
     city = city.lower()
     location = (lat, lon)
     
