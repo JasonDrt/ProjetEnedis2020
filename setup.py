@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type = "text/markdown",
     url = "https://github.com/JasonDrt/semic",
     packages = setuptools.find_packages(),
+    package_data = {'semic' : ['code_insee.csv', 'historique_meteo.csv']}
     include_package_data = True,
     classifiers = [
         "Programming Language :: Python :: 3",
