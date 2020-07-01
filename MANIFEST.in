@@ -1,0 +1,2 @@
+include data/code_insee.csv
+include data/historique_meteo.csv
