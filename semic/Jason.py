@@ -277,7 +277,7 @@ def check_city(coord, reg, city):
     lat = coord[1]
     byt = pkgutil.get_data('semic', 'historique_meteo.csv')
     data = str(byt, 'utf-8')
-    df = pd.read_csv(StringIO(data), sep = ';', converters = {'villes': eval, 'villes_url': eval, 'coordinates (lat,lon)': eval})
+    df = pd.read_csv(StringIO(data), sep = ',', converters = {'villes': eval, 'villes_url': eval, 'coordinates (lat,lon)': eval})
     # df = pd.read_csv('./historique_meteo.csv', converters = {'villes': eval, 'villes_url': eval, 'coordinates (lat,lon)': eval})
     city = city.lower()
     location = (lat, lon)
