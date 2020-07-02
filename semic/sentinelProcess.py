@@ -175,7 +175,4 @@ def print_img(br,bg,bb,size,name):
 
 def _main_(user,pw,gps_coord,date,width,size,p='./',tile_name=None,name='SentinelImage'):
     b1, b2, b3 = search_tile(user,pw,date,gps_coord,width,p=p,tile_name=tile_name)
-    if b1 != None :
-        print_img(b3,b2,b1,size,name=name)
-    else:
-        print('No image to download')
+    print_img(b3,b2,b1,size,name=name)
