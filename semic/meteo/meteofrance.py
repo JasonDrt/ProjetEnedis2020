@@ -16,7 +16,7 @@ def find_insee(city, postal):
     """
     byt = pkgutil.get_data("semic", "code_insee.csv")
     data = str(byt, 'utf-8')
-    insee = pd.read_csv(StringIO(data), sep = ';')
+    insee = pd.read_csv(StringIO(data), sep = ',')
     insee = insee[insee['Commune'] == city.upper()]
     assert len(insee) > 0, "Aucune commune ne correspond à cette recherche"
     code = insee['Code INSEE'][insee['Code Postal'].str.contains(str(postal))].values[0]
