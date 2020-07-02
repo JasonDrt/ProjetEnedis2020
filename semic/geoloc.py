@@ -11,7 +11,8 @@ def get_city(coord : iter):
     lon = coord[0]
     nominatim = Nominatim(user_agent = 'my-application')
     r = nominatim.reverse(str(lat) + ',' + str(lon))
-    return r.raw['address']
+    dic = r.raw['address']
+    return dic
 
 def select_city_postal(address : dict):
     """Documntation
