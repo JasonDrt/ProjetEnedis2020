@@ -510,3 +510,19 @@ def get_elevation_fr(coord):
 def to_json(dic, path, sort = True):
     with open(path, 'w') as fp:
         json.dump(dic, fp, sort_keys=sort, indent=4)
+
+def main(coord, dist, year_meteo):
+    elevation = get_elevation_fr(coord)
+    plan = get_plan(coord, dist)
+    sat = get_plan(coord, dist, style='sat')
+    city, postal = select_city_postal(get_city(coord))
+    code = find_insee(city, postal)
+    meteo_mf = estimate_meteo_year(code, year_meteo)
+    meteo_hm = get_historique_meteo(coord, year_meteo)
+    dic = {}
+    dic['elevation'] = elevation
+    dic['img_plan'] = plan
+    dic['img_sat'] = sat
+    dic['weather (meteofrance)'] = meteo_mf
+    dic['weather (historique_meteo)'] = meteo_hm
+    return dic
