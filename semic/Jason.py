@@ -511,10 +511,10 @@ def to_json(dic, path, sort = True):
     with open(path, 'w') as fp:
         json.dump(dic, fp, sort_keys=sort, indent=4)
 
-def main(coord, dist, year_meteo):
+def main(coord, dist, year_meteo, width = 200, height = 400):
     elevation = get_elevation_fr(coord)
-    plan = get_plan(coord, dist)
-    sat = get_plan(coord, dist, style='sat')
+    plan = get_plan(coord, dist, width = width, height = height)
+    sat = get_plan(coord, dist, style='sat', width = width, height = height)
     city, postal = select_city_postal(get_city(coord))
     code = find_insee(city, postal)
     meteo_mf = estimate_meteo_year(code, year_meteo)
