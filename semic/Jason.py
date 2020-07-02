@@ -15,6 +15,7 @@ from haversine import haversine
 from collections import defaultdict
 import pkgutil
 from io import StringIO
+import json
 
 # %% [markdown]
 # ## Functions
@@ -305,8 +306,6 @@ def get_historique_meteo(coord, year, month=None):
     Out:
         res: dictionnary of the weather
     """
-    lon = coord[0]
-    lat = coord[1]
     address = get_city(coord)
     city, postal = select_city_postal(address)
     region_url = assign_old_state(postal[0:2])
@@ -487,21 +486,21 @@ def get_elevation(coord):
 
 
 # %%
-def get_elevation_fr(coord):
-    lon = coord[0]
-    lat = coord[1]
-    query = 'http://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon={0}&lat={1}&zonly=true'
-    if type(lat) == list:
-        assert len(lat) == len(lon), "Latitudes and longitude must have the same length"
-        for i in range(len(lat)):
-            list_lon = '|'.join(map(str, lon))
-            list_lat = '|'.join(map(str, lat))
-        q = query.format(list_lon, list_lat)
+def get_elevation_fr(coord : iter):
+    if any(isinstance(el, (tuple, list)) for el in coord):
+        lon = [i[0] for i in coord]
+        lat = [i[1] for i in coord]
+        lon = '|'.join(map(str, lon))
+        lat = '|'.join(map(str, lat))
     else:
-        q = query.format(lon, lat)
+        lon = coord[0]
+        lat = coord[1]
+    query = 'http://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon={0}&lat={1}&zonly=true'
+    q = query.format(lon, lat)
     r = requests.get(q)
     dic = r.json()
-    return dic['elevations']
+    list_elevations = dic['elevations']
+    return list_elevations
 
 # %% [markdown]
 # ##### Save
