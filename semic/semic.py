@@ -1,4 +1,4 @@
-from maps import get_plan
+from semic.maps import get_plan
 from meteo import get_historique_meteo, get_meteo, get_meteo_monthly, estimate_meteo_year, find_insee
 from gps_info import get_elevation_fr, get_elevation, get_city, select_city_postal
 from sentinelProcess.sentinelProcess import search_tile
