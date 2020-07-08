@@ -7,7 +7,7 @@ from io import StringIO
 import datetime
 from collections import defaultdict
 import numpy as np
-from semic.geoloc import get_city, select_city_postal
+from semic.gps_info.geoloc import get_city, select_city_postal
 
 def assign_old_state(code):
     """Documentation
