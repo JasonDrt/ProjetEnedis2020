@@ -17,8 +17,8 @@ import os.path
 from os import path
 import zipfile
 import cv2
-import sentinelAccess as sa
-        
+from semic.sentinelProcess import connect_api, get_products, dl_products
+     
 def tci_process(path,width,gps_coord):
     #chargement de l'image
     tci = rasterio.open(path, driver='JP2OpenJPEG') #colors
@@ -92,10 +92,10 @@ def tci_process(path,width,gps_coord):
 
 def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None):
     #Connect to Sentinel2 API and search tiles.
-    api = sa.connect_api(user, pw)
+    api = connect_api(user, pw)
     if tile_name == None:
         gps_coord_str = str(gps_coord[1])+', '+str(gps_coord[0])
-        df_prod = sa.get_products(api, gps_coord_str, date, lim=l)
+        df_prod = get_products(api, gps_coord_str, date, lim=l)
     else :
         products = api.query(filename=tile_name)
         df_prod = api.to_dataframe(products)
@@ -142,7 +142,7 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None):
     
     else :
         #Download proposal
-        sa.dl_products(api, df_prod)
+        dl_products(api, df_prod)
         return(None)
         
 def print_img(br,bg,bb,size,name):
