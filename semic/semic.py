@@ -31,13 +31,9 @@ class Line:
         self.coords = coords
 
     def _center_of_line(self):
-        lon1 = self.coords[0][0]
-        lat1 = self.coords[0][1]
-        lon2 = self.coords[-1][0]
-        lat2 = self.coords[-1][1]
-
-        lon = (lon1 + lon2) / 2
-        lat = (lat1 + lat2) / 2
+        length = len(self.coords)
+        lon = sum(i[0] for i in self.coords) / length
+        lat = sum(i[1] for i in  self.coords) / length
         center = (lon, lat)
         return center
 
@@ -63,6 +59,13 @@ class Line:
     def elevation(self):
         list_elevations = get_elevation_fr(self.coords)
         return list_elevations
+
+    def get_sentinel_im(self, user, pw, date, width, size, l=1, p='./',tile_name=None):
+        center = self._center_of_line()
+        im = search_tile(user, pw, date, center, width, l=1, p='./',tile_name=None)
+        if im != None :
+            im = im.resize(size)
+            return(im)
 
 # class PolyLine:
 #     def __init__(self, coords):
