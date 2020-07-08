@@ -16,7 +16,7 @@ from pyproj import Proj, transform
 import os.path
 from os import path
 import zipfile
-import cv2
+from PIL import Image
 from semic.sentinelProcess import connect_api, get_products, dl_products
      
 def tci_process(path,width,gps_coord):
