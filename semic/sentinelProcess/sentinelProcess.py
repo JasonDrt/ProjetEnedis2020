@@ -112,7 +112,12 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None):
                     filename = f
         file_path = file_path+directories[0]+'/IMG_DATA/R10m/'+filename
         band1, band2, band3 = tci_process(file_path,width,gps_coord)
-        return(band1, band2, band3)
+        img = np.zeros((band1.shape[0],band1.shape[1],3),dtype=np.uint8)
+        img[:,:,0] = band1
+        img[:,:,1] = band2
+        img[:,:,2] = band3
+        img_pil = Image.fromarray(img)
+        return(img_pil)
     
     elif os.path.exists(p+df_prod['title'][0]+'.zip'):
         with zipfile.ZipFile(p+df_prod['title'][0]+'.zip', 'r') as zip_ref:
@@ -128,12 +133,17 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None):
                     filename = f
         file_path = file_path+directories[0]+'/IMG_DATA/R10m/'+filename
         band1, band2, band3 = tci_process(file_path,width,gps_coord)
-        return(band1, band2, band3)
+        img = np.zeros((band1.shape[0],band1.shape[1],3),dtype=np.uint8)
+        img[:,:,0] = band1
+        img[:,:,1] = band2
+        img[:,:,2] = band3
+        img_pil = Image.fromarray(img)
+        return(img_pil)
     
     else :
         #Download proposal
         sa.dl_products(api, df_prod)
-        return(None,None,None)
+        return(None)
         
 def print_img(br,bg,bb,size,name):
     img = np.zeros((br.shape[0],br.shape[1],3))
