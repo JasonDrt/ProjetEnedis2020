@@ -50,7 +50,7 @@ class Line:
         center = self._center_of_line()
 
         if month == None:
-            assert day == None, "Parameter month must be filled in"
+            assert day == None, "Parameter 'month' must be filled in"
             return get_historique_meteo(center, year)
         else:
             if day == None:
