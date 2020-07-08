@@ -26,8 +26,7 @@ def get_plan(coord, dist, style='plan', width = None, height = None):
     
     m = StaticMap(width, height, url_template=url_temp, tile_size = 256)
     if any(isinstance(el, (tuple, list)) for el in coord):
-        flat_list = [item for sublist in coord for item in sublist]
-        line = Line(flat_list, 'red', 2)
+        line = Line(coord, 'red', 2)
         m.add_line(line)
     else:
         marker = CircleMarker(coord, 'red', 5)  # longitude, latitude

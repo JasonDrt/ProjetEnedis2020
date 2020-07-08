@@ -6,6 +6,8 @@ from semic.sentinelProcess import search_tile
 class Point:
     def __init__(self, coord):
         self.coord = coord
+        self.lon = coord[0]
+        self.lat = coord[1]
 
     def elevation(self):
         return get_elevation_fr(self.coord)
@@ -69,7 +71,7 @@ class Line:
 
     def get_sentinel_im(self, user, pw, date, width, size, l=1, p='./',tile_name=None):
         center = self._center_of_line()
-        im = search_tile(user, pw, date, center, width, l=1, p='./',tile_name=None)
+        im = search_tile(user, pw, date, center, width, l, p, tile_name)
         if im != None :
             im = im.resize(size)
             return(im)
