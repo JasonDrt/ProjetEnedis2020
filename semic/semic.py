@@ -26,6 +26,12 @@ class Point:
     
     def map(self, dist, style = 'plan', width = None, height = None):
         return get_plan(self.coord, dist, style, width, height)
+    
+    def get_sentinel_im(self, user, pw, date, width, size, l=1, p='./',tile_name=None):
+        im = search_tile(user, pw, date, self.coord, width, l=1, p='./',tile_name=None)
+        if im != None :
+            im = im.resize(size)
+            return(im)
 
 class Line:
     def __init__(self, coords):

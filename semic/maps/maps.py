@@ -21,8 +21,8 @@ def get_plan(coord, dist, style='plan', width = None, height = None):
     
     if width == None:
         width = dist
-    if heigth == None:
-        heigth = dist
+    if height == None:
+        height = dist
     
     m = StaticMap(width, height, url_template=url_temp, tile_size = 256)
     if any(isinstance(el, (tuple, list)) for el in coord):
