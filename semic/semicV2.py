@@ -35,7 +35,7 @@ class Point:
                 return get_meteo(insee_code, date)
     
     def map(self, style = 'plan', w = None, height = None):
-        return get_plan(self.coord, self.width, style, w, height)
+        return get_plan(self.coord, self.width * 100, style, w, height)
     
     def get_sentinel_im(self, l=1, p='./', tile_name=None):
         date = (str(self.year)+'-'+"{0:0=2d}".format(self.month)+'-'+"{0:0=2d}".format(self.day)+'T00:00:00Z-10DAYS', 
