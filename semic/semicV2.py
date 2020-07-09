@@ -4,7 +4,7 @@ from semic.gps_info import get_elevation_fr, get_elevation, get_city, select_cit
 from semic.sentinelProcess import search_tile
 
 class Point:
-    def __init__(self, coord, year:int, month:int = None, day:int = None, user, pw, width, size,dist):
+    def __init__(self, coord, user, pw, width, size, dist, year:int, month:int = None, day:int = None):
         self.coord = coord
         self.lon = coord[0]
         self.lat = coord[1]
@@ -46,8 +46,8 @@ class Point:
             return(im)
 
 class Line:
-    def __init__(self, coords, year:int, month:int = None, day:int = None, user, pw, width, size,dist):
-        self.coords = coord
+    def __init__(self, coords, user, pw, width, size, dist, year:int, month:int = None, day:int = None):
+        self.coords = coords
         self.year = year
         self.month = month
         self.day = day
@@ -55,7 +55,7 @@ class Line:
         self.pw = pw
         self.width = width
         self.size = size
-        self.dist = dists
+        self.dist = dist
 
     def _center_of_line(self):
         length = len(self.coords)
