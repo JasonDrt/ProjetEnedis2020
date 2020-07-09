@@ -31,7 +31,7 @@ class Point:
                 address = get_city(self.coord)
                 city, postal_code = select_city_postal(address)
                 insee_code = find_insee(city, postal_code)
-                date = "{0:0=2d}".format(self.day) + "-" + "{0:0=2d}".format(self.month) + str(self.year)
+                date = "{0:0=2d}".format(self.day) + "-" + "{0:0=2d}".format(self.month) + '-' + str(self.year)
                 return get_meteo(insee_code, date)
     
     def map(self, style = 'plan', w = None, height = None):
