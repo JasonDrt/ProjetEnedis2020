@@ -1,1 +1,1 @@
-from .semic import DataRequest
+from semic import DataRequest
