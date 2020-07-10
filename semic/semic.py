@@ -17,6 +17,19 @@ class DataRequest:
         self.pwd = pwd
 
     def to_json(self, dic, sort = True):
+        if 'img_plan' in dic:
+            img_plan = dic['img_plan']
+            img_plan.save(self.path + 'img_plan.jpg', 'JPEG')
+            dic['img_plan'] = self.path + 'img_plan.jpg'
+        if 'img_sat' in dic:
+            img_sat = dic['img_sat']
+            img_sat.save(self.path + 'img_sat.jpg', 'JPEG')
+            dic['img_sat'] = self.path + 'img_sat.jpg'
+        if 'img_sentinel' in dic:
+            img_sentinel = dic['img_sentinel']
+            img_sentinel.save(self.path + 'img_sentinel.jpg', 'JPEG')
+            dic['img_sentinel'] = self.path + 'img_sentinel.jpg'
+
         with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
             json.dump(dic, fp, sort_keys=sort, indent=4)
 
