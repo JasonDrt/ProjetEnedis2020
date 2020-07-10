@@ -11,11 +11,20 @@ class DataRequest:
         self.size = size_img
         self.user = None
         self.pwd = None
+        self.width = None
+        self.path_to_sentinel = None
+        self.nb_tile = None
+        self.tile_name = None
     
-    def set_sentinel_logs(self, user, pwd):
+    
+    def set_sentinel_param(self, user, pwd, width, nb_of_tile=1, path_to_sentinel='./', tile_name=None):
         self.user = user
         self.pwd = pwd
-
+        self.width = width
+        self.path_to_sentinel = path_to_sentinel
+        self.nb_tile = nb_of_tile
+        self.tile_name = tile_name
+    
     def to_json(self, dic, sort = True):
         if 'img_plan' in dic:
             img_plan = dic['img_plan']
@@ -33,13 +42,25 @@ class DataRequest:
         with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
             json.dump(dic, fp, sort_keys=sort, indent=4)
 
-    def point(self, coords, date, dist):
-        weather = get_historique_meteo(coords, date)
-        img_plan = get_plan(coords, dist, style = 'plan', width = self.size[0], height = self.size[1])
-        img_sat = get_plan(coords, dist, style = 'sat', width = self.size[0], height = self.size[1])
+    def point(self, coords, year : int, month : int = None, day : int = None):
+        weather = get_historique_meteo(coords, year, month, day)
+        img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
+        img_sat = get_plan(coords, self.width, style = 'sat', width = self.size[0], height = self.size[1])
         if (self.user != None) and (self.pwd != None):
-            img_sentinel = search_tile(self.user, self.pwd, date, coords, dist)
-            weather['img_sentinel'] = img_sentinel
+            if day != None :
+                date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z')
+            elif month != None :
+                date = date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"01"+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"{0:0=2d}".format(month)+'-'+"01"+'T00:00:00Z')
+            else :
+                date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
+            img_sentinel = search_tile(self.user, self.pwd, date, coords, self.width, 
+                                       self.nb_tile, self.path_to_sentinel, self.tile_name)
+            if img_sentinel != None :
+                weather['img_sentinel'] = img_sentinel
+        
         elevation = get_elevation_fr(coords)
         
 
@@ -49,14 +70,25 @@ class DataRequest:
 
         return weather
     
-    def line(self, coords, date, dist):
+    def line(self, coords, year : int, month : int = None, day : int = None):
         center = center_of_line(coords)
-        weather = get_historique_meteo(center, date)
-        img_plan = get_plan(coords, dist, style = 'plan', width = self.size[0], height = self.size[1])
-        img_sat = get_plan(coords, dist, style = 'sat', width = self.size[0], height = self.size[1])
+        weather = get_historique_meteo(center, year, month, day)
+        img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
+        img_sat = get_plan(coords, self.width, style = 'sat', width = self.size[0], height = self.size[1])
         if (self.user != None) and (self.pwd != None):
-            img_sentinel = search_tile(self.user, self.pwd, date, center, dist)
-            weather['img_sentinel'] = img_sentinel
+            if day != None :
+                date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z')
+            elif month != None :
+                date = date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"01"+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"{0:0=2d}".format(month)+'-'+"01"+'T00:00:00Z')
+            else :
+                date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
+            img_sentinel = search_tile(self.user, self.pwd, date, center, self.width, 
+                                       self.nb_tile, self.path_to_sentinel, self.tile_name)
+            if img_sentinel != None :
+                weather['img_sentinel'] = img_sentinel
         elevation = get_elevation_fr(coords)
         
         
