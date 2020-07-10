@@ -2,86 +2,62 @@ from semic.maps import get_plan
 from semic.meteo import get_historique_meteo, get_meteo, get_meteo_monthly, estimate_meteo_year, find_insee
 from semic.gps_info import get_elevation_fr, get_elevation, get_city, select_city_postal
 from semic.sentinelProcess import search_tile
+from utils import center_of_line
+import json
 
-class Point:
-    def __init__(self, coord):
-        self.coord = coord
-        self.lon = coord[0]
-        self.lat = coord[1]
-
-    def elevation(self):
-        return get_elevation_fr(self.coord)
+class DataRequest:
+    def __init__(self, path_to_folder, size_img):
+        self.path = path_to_folder
+        self.size = size_img
+        self.user = None
+        self.pwd = None
     
-    def weather(self, year : int, month : int = None, day : int = None):
-        if month == None:
-            assert day == None, "Parameter month must be filled in"
-            return get_historique_meteo(self.coord, year)
-        else:
-            if day == None:
-                return get_historique_meteo(self.coord, year, month)
-            else:
-                address = get_city(self.coord)
-                city, postal_code = select_city_postal(address)
-                insee_code = find_insee(city, postal_code)
-                date = "{0:0=2d}".format(day) + "-" + "{0:0=2d}".format(month) + '-' + str(year)
-                return get_meteo(insee_code, date)
+    def set_sentinel_logs(self, user, pwd):
+        self.user = user
+        self.pwd = pwd
+
+    def to_json(self, dic, sort = True):
+        with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
+            json.dump(dic, fp, sort_keys=sort, indent=4)
+
+    def point(self, coords, date, dist):
+        img_plan = get_plan(coords, dist, style = 'plan', width = self.size[0], height = self.size[1])
+        img_sat = get_plan(coords, dist, style = 'sat', width = self.size[0], height = self.size[1])
+        if (self.user != None) and (self.pwd != None):
+            img_sentinel = search_tile(self.user, self.pwd, date, coords, dist)
+        elevation = get_elevation_fr(coords)
+        weather = get_historique_meteo(coords, date)
+
+        weather['elevation'] = elevation
+        weather['img_sat'] = img_sat
+        weather['img_plan'] = img_plan
+        weather['img_sentinel'] = img_sentinel
+
+        return weather
     
-    def map(self, dist, style = 'plan', width = None, height = None):
-        return get_plan(self.coord, dist, style, width, height)
-    
-    def get_sentinel_im(self, user, pw, date, width, size, l=1, p='./',tile_name=None):
-        im = search_tile(user, pw, date, self.coord, width, l, p, tile_name)
-        if im != None :
-            im = im.resize(size)
-            return(im)
-
-class Line:
-    def __init__(self, coords):
-        self.coords = coords
-
-    def _center_of_line(self):
-        length = len(self.coords)
-        lon = sum(i[0] for i in self.coords) / length
-        lat = sum(i[1] for i in  self.coords) / length
-        center = (lon, lat)
-        return center
-
-    def weather(self, year : int, month : int = None, day : int = None):
-        center = self._center_of_line()
-
-        if month == None:
-            assert day == None, "Parameter 'month' must be filled in"
-            return get_historique_meteo(center, year)
-        else:
-            if day == None:
-                return get_historique_meteo(center, year, month)
-            else:
-                address = get_city(center)
-                city, postal_code = select_city_postal(address)
-                insee_code = find_insee(city, postal_code)
-                date = "{0:0=2d}".format(day) + "-" + "{0:0=2d}".format(month) + '-' + str(year)
-                return get_meteo(insee_code, date)
-    
-    def map(self, dist, style = 'plan', width = None, height = None):
-        return get_plan(self.coords, dist, style, width, height)
-    
-    def elevation(self):
-        list_elevations = get_elevation_fr(self.coords)
-        return list_elevations
-
-    def get_sentinel_im(self, user, pw, date, width, size, l=1, p='./',tile_name=None):
-        center = self._center_of_line()
-        im = search_tile(user, pw, date, center, width, l, p, tile_name)
-        if im != None :
-            im = im.resize(size)
-            return(im)
-
-# class PolyLine:
-#     def __init__(self, coords):
-#         self.coords = coords
+    def line(self, coords, date, dist):
+        center = center_of_line(coords)
+        img_plan = get_plan(center, dist, style = 'plan', width = self.size[0], height = self.size[1])
+        img_sat = get_plan(center, dist, style = 'sat', width = self.size[0], height = self.size[1])
+        if (self.user != None) and (self.pwd != None):
+            img_sentinel = search_tile(self.user, self.pwd, date, center, dist)
+        elevation = get_elevation_fr(coords)
+        weather = get_historique_meteo(center, date)
         
-#     def _center_of_polyline(self):
-        
-#     def meteo(self, year, month = None, day = None):
+        weather['elevation'] = elevation
+        weather['img_sat'] = img_sat
+        weather['img_plan'] = img_plan
+        weather['img_sentinel'] = img_sentinel
+
+        return weather
+
+    def polyline(self, coords, date, dist):
+        res = {}
+        list_elevation = []
+        for coord in coords:
+            list_elevation.append(get_elevation_fr(coord))
+        flat_list = [item for sublist in coords for item in sublist]
+        center = center_of_line(flat_list)
+                   
 
         
