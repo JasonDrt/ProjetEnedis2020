@@ -1,6 +1,6 @@
 from staticmap import StaticMap, CircleMarker, Line, Polygon
 
-def get_plan(coord, dist, style='plan', width = None, height = None):
+def get_plan(coord, dist, style='plan', width = None, height = None, poly = False):
     """Documentation
     Parameters:
         coord: tuple of gps coordinates (longitude, latitude)
@@ -25,11 +25,16 @@ def get_plan(coord, dist, style='plan', width = None, height = None):
         height = dist
     
     m = StaticMap(width, height, url_template=url_temp, tile_size = 256)
-    if any(isinstance(el, (tuple, list)) for el in coord):
-        line = Line(coord, 'red', 2)
-        m.add_line(line)
+    if poly:
+        for line in coord:
+            l = Line(line, 'red', 2)
+            m.add_line(l)
     else:
-        marker = CircleMarker(coord, 'red', 5)  # longitude, latitude
-        m.add_marker(marker)
+        if any(isinstance(el, (tuple, list)) for el in coord):
+            line = Line(coord, 'red', 2)
+            m.add_line(line)
+        else:
+            marker = CircleMarker(coord, 'red', 5)  # longitude, latitude
+            m.add_marker(marker)
     image = m.render()
     return image

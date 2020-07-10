@@ -52,8 +52,8 @@ class DataRequest:
     def line(self, coords, date, dist):
         center = center_of_line(coords)
         weather = get_historique_meteo(center, date)
-        img_plan = get_plan(center, dist, style = 'plan', width = self.size[0], height = self.size[1])
-        img_sat = get_plan(center, dist, style = 'sat', width = self.size[0], height = self.size[1])
+        img_plan = get_plan(coords, dist, style = 'plan', width = self.size[0], height = self.size[1])
+        img_sat = get_plan(coords, dist, style = 'sat', width = self.size[0], height = self.size[1])
         if (self.user != None) and (self.pwd != None):
             img_sentinel = search_tile(self.user, self.pwd, date, center, dist)
             weather['img_sentinel'] = img_sentinel
@@ -66,14 +66,21 @@ class DataRequest:
 
         return weather
 
-    # def polyline(self, coords, date, dist):
-    #     res = {}
-    #     list_elevation = []
-    #     for coord in coords:
-    #         list_elevation.append(get_elevation_fr(coord))
-    #     flat_list = [item for sublist in coords for item in sublist]
-    #     center = center_of_line(flat_list)
+    def polyline(self, coords, date, dist):
+        list_elevation = []
+        for coord in coords:
+            list_elevation.append(get_elevation_fr(coord))
+        img_plan = get_plan(coords, dist, style = 'plan', width = self.size[0], height = self.size[1], poly = True)
+        img_sat = get_plan(coords, dist, style = 'sat', width = self.size[0], height = self.size[1], poly = True)
+        
+        flat_list = [item for sublist in coords for item in sublist]
+        center = center_of_line(flat_list)
+        weather = get_historique_meteo(center, date)
 
-    #     return res           
+        weather['img_plan'] = img_plan
+        weather['img_sat'] = img_sat
+        weather['elevation'] = list_elevation
+
+        return weather     
 
         
