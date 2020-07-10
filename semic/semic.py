@@ -25,13 +25,13 @@ class DataRequest:
         img_sat = get_plan(coords, dist, style = 'sat', width = self.size[0], height = self.size[1])
         if (self.user != None) and (self.pwd != None):
             img_sentinel = search_tile(self.user, self.pwd, date, coords, dist)
+            weather['img_sentinel'] = img_sentinel
         elevation = get_elevation_fr(coords)
         weather = get_historique_meteo(coords, date)
 
         weather['elevation'] = elevation
         weather['img_sat'] = img_sat
         weather['img_plan'] = img_plan
-        weather['img_sentinel'] = img_sentinel
 
         return weather
     
@@ -41,13 +41,13 @@ class DataRequest:
         img_sat = get_plan(center, dist, style = 'sat', width = self.size[0], height = self.size[1])
         if (self.user != None) and (self.pwd != None):
             img_sentinel = search_tile(self.user, self.pwd, date, center, dist)
+            weather['img_sentinel'] = img_sentinel
         elevation = get_elevation_fr(coords)
         weather = get_historique_meteo(center, date)
         
         weather['elevation'] = elevation
         weather['img_sat'] = img_sat
         weather['img_plan'] = img_plan
-        weather['img_sentinel'] = img_sentinel
 
         return weather
 
