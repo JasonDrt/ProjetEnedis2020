@@ -2,7 +2,7 @@ from semic.maps import get_plan
 from semic.meteo import get_historique_meteo, get_meteo, get_meteo_monthly, estimate_meteo_year, find_insee
 from semic.gps_info import get_elevation_fr, get_elevation, get_city, select_city_postal
 from semic.sentinelProcess import search_tile
-from utils import center_of_line
+from semic.utils import center_of_line
 import json
 
 class DataRequest:
@@ -58,6 +58,8 @@ class DataRequest:
             list_elevation.append(get_elevation_fr(coord))
         flat_list = [item for sublist in coords for item in sublist]
         center = center_of_line(flat_list)
-                   
+        weather = 
+
+        return res           
 
         
