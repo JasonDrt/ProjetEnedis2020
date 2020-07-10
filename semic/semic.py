@@ -51,15 +51,14 @@ class DataRequest:
 
         return weather
 
-    def polyline(self, coords, date, dist):
-        res = {}
-        list_elevation = []
-        for coord in coords:
-            list_elevation.append(get_elevation_fr(coord))
-        flat_list = [item for sublist in coords for item in sublist]
-        center = center_of_line(flat_list)
-        weather = 
+    # def polyline(self, coords, date, dist):
+    #     res = {}
+    #     list_elevation = []
+    #     for coord in coords:
+    #         list_elevation.append(get_elevation_fr(coord))
+    #     flat_list = [item for sublist in coords for item in sublist]
+    #     center = center_of_line(flat_list)
 
-        return res           
+    #     return res           
 
         
