@@ -78,6 +78,22 @@ def check_city(coord, reg, city):
         city = df[df['region_url'] == reg]['villes'].values[0][idx]
     return city_url, city
 
+def check_last_date(region_url, city_url, year, month = None):
+    url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}'
+    if month == None:
+        month = datetime.datetime.now().month
+        month = "{0:02d}".format(month)
+    url_test = url.format(region_url, city_url, year, month)
+    page = requests.get(url_test)
+    code = page.status_code
+    while code != 200:
+        month = int(month) - 1
+        month = "{0:02d}".format(month)
+        url_test = url.format(region_url, city_url, year, month)
+        page = requests.get(url_test)
+        code = page.status_code
+    return month
+
 def get_historique_meteo(coord, year, month=None):
     """Documentation
     Parameters:
@@ -98,20 +114,23 @@ def get_historique_meteo(coord, year, month=None):
     year = str(year)
 
     if month != None:
+        month_2d = "{0:0=2d}".format(month)
+        month_lim = check_last_date(region_url, city_url, year, month_2d)
         if year == now.year:
             assert (int(month) >= 0) & (
-                int(month) <= now.month), "The month must be between 0 and " + str(now.month)
+                int(month) <= int(month_lim)), "The month must be between 0 and " + str(month_lim) + " (last month available on the website)"
         else:
             assert (int(month) >= 0) & (int(month) <=
                                         12), "The month must be between 0 and 12"
-        month = "{0:0=2d}".format(month)
         url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}'
-        url = url.format(region_url, city_url, year, month)
+        url = url.format(region_url, city_url, year, month_2d)
         res = scrap_historique_meteo(url)
 
     else:
         if year == now.year:
-            range_month = now.month
+            month_2d = "{0:0=2d}".format(month)
+            month_lim = check_last_date(region_url, city_url, year, month_2d)
+            range_month = int(month_lim) + 1
         else:
             range_month = 13
 
@@ -194,3 +213,5 @@ def scrap_historique_meteo(url):
         
         dic[key] = tokeep
     return dic
+
+        
