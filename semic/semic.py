@@ -43,7 +43,13 @@ class DataRequest:
             json.dump(dic, fp, sort_keys=sort, indent=4)
 
     def point(self, coords, year : int, month : int = None, day : int = None):
-        weather = get_historique_meteo(coords, year, month, day)
+        if day != None:
+            city, postal = select_city_postal(get_city(coords))
+            insee_code = find_insee(city, postal)
+            date = "{0:0=2d}".format(day) + '-' + "{0:0=2d}".format(month) + '-' + str(year)
+            weather = get_meteo(insee_code, date)
+        else:
+            weather = get_historique_meteo(coords, year, month)
         img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
         img_sat = get_plan(coords, self.width, style = 'sat', width = self.size[0], height = self.size[1])
         if (self.user != None) and (self.pwd != None):
@@ -72,7 +78,13 @@ class DataRequest:
     
     def line(self, coords, year : int, month : int = None, day : int = None):
         center = center_of_line(coords)
-        weather = get_historique_meteo(center, year, month, day)
+        if day != None:
+            city, postal = select_city_postal(get_city(center))
+            insee_code = find_insee(city, postal)
+            date = "{0:0=2d}".format(day) + '-' + "{0:0=2d}".format(month) + '-' + str(year)
+            weather = get_meteo(insee_code, date)
+        else:
+            weather = get_historique_meteo(center, year, month)
         img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
         img_sat = get_plan(coords, self.width, style = 'sat', width = self.size[0], height = self.size[1])
         if (self.user != None) and (self.pwd != None):
