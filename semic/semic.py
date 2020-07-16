@@ -28,9 +28,9 @@ class DataRequest:
         self.tile_name = tile_name
         self.dw_option = dw_option
     
-    def datetime_converter(obj):
-        if isinstance(obj, datetime.datetime):
-            return obj.__str__()
+    # def datetime_converter(obj):
+    #     if isinstance(obj, datetime.datetime):
+    #         return obj.__str__()
 
     def to_json(self, dic, sort = True):
         if 'img_plan' in dic:
@@ -53,7 +53,7 @@ class DataRequest:
         #     dic['Durée du jour'] = dic['Durée du jour'].isoformat()
 
         with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
-            json.dump(dic, fp, sort_keys=sort, indent=4, default = datetime_converter)
+            json.dump(dic, fp, sort_keys=sort, indent=4, default = str)
 
     def point(self, coords, year : int, month : int = None, day : int = None):
         if day != None:
