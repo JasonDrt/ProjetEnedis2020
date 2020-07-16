@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: semic
+Version: 0.0.1
+Summary: Satellite, environmental and meteorologic information collect
+Home-page: https://github.com/JasonDrt/semic
+Author: JasonDrt, LesavoureyMael
+Author-email: lesavoureym@gmail.com
+License: UNKNOWN
+Description: # ProjetEnedis2020
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GPL-3.0 License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
