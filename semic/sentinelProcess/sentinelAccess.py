@@ -27,12 +27,18 @@ def get_products(api, footprint, date, platform='Sentinel-2', prd_type='S2MSI2A'
                          cloudcoverpercentage = cloudcover, producttype = prd_type)
     return(api.to_dataframe(products))
 
-def dl_products(api, df_prod):
+def dl_products(api, df_prod,option='n'):
     l = len(df_prod)
-    a = input('There is/are '+ str(l) +' file(s) to download, you wish to do it? (y/n)')
-    if a == 'y' :
+    if option == 'i':
+        a = input('There is/are '+ str(l) +' file.s to download, you wish to do it? (y/n)')
+        if a == 'y' :
+            for i in range(l):
+                api.download(df_prod.index[i])
+        else :
+            print('No dowload started')
+    elif option == 'y':
         for i in range(l):
-            api.download(df_prod.index[i])
-    else :
-        print('No download started')
+                api.download(df_prod.index[i])
+    elif option == 'n':
+        print('No dowload started')
 

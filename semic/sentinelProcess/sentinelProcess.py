@@ -90,7 +90,7 @@ def tci_process(path,width,gps_coord):
     band3 = band3[i_t:i_b,j_l:j_r]
     return(band1, band2, band3)
 
-def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None):
+def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n'):
     #Connect to Sentinel2 API and search tiles.
     api = connect_api(user, pw)
     if tile_name == None:
@@ -142,7 +142,7 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None):
     
     else :
         #Download proposal
-        dl_products(api, df_prod)
+        dl_products(api, df_prod,option)
         return(None)
         
 def print_img(br,bg,bb,size,name):
