@@ -86,12 +86,13 @@ def check_last_date(region_url, city_url, year, month = None):
     url_test = url.format(region_url, city_url, year, month)
     page = requests.get(url_test)
     code = page.status_code
-    while (code != 200) and int(month) > 0:
+    while (code != 200) and int(month) > -1:
         month = int(month) - 1
         month = "{0:02d}".format(month)
         url_test = url.format(region_url, city_url, year, month)
         page = requests.get(url_test)
         code = page.status_code
+    assert month == 0, 'No data available for any month for this year'
     return month
 
 def get_historique_meteo(coord, year, month=None):
@@ -170,8 +171,10 @@ def get_historique_meteo(coord, year, month=None):
         for key in mean_time:
             m = np.mean(list(map(lambda f: (((f.hour * 60) + f.minute) * 60) + f.second, res[key])))
             res[key] = datetime.datetime.strptime(str(datetime.timedelta(seconds = m)), '%H:%M:%S').time()
+        
+    res = standardise_keys(res)
 
-    res['Ville'] = city
+    res['city'] = city
     return dict(res)
 
 def scrap_historique_meteo(url):
@@ -214,4 +217,25 @@ def scrap_historique_meteo(url):
         dic[key] = tokeep
     return dic
 
-        
+def standardise_keys(dic):
+    dic['avg_temp'] = dic.pop('Température moyenne (°C)')
+    dic['max_temp'] = dic.pop('Température maximale (°C)')
+    dic['min_temp'] = dic.pop('Température minimale (°C)')
+    dic['record_max_temp'] = dic.pop('Température maximale record (°C)')
+    dic['record_min_temp'] = dic.pop('Température minimale record (°C)')
+    dic['wind_speed'] = dic.pop('Vitesse du vent (km/h)')
+    dic['avg_rainfall_per_day'] = dic.pop('Précipitations moyennes par jour (mm)')
+    dic['total_rainfall'] = dic.pop('Précipitations totales sur le mois (mm)')
+    dic['record_rainfall_day'] = dic.pop('Record de précipitations sur une journée (mm)')
+    dic['humidity'] = dic.pop('Humidité (%)')
+    dic['visibility'] = dic.pop('Visibilité (km)')
+    dic['cloud_coverage'] = dic.pop('Couverture nuageuse (%)')
+    dic['heat_index'] = dic.pop('Indice de chaleur')
+    dic['dew_point_temp'] = dic.pop('Point de rosée (°C)')
+    dic['pressure'] = dic.pop('Pression (hPa)')
+    dic['sunrise_time'] = dic.pop('Heure du lever du soleil')
+    dic['sunset_time'] = dic.pop('Heure du coucher du soleil')
+    dic['day_length'] = dic.pop('Durée du jour')
+
+    return dic
+            
