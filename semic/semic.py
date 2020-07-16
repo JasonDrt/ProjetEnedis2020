@@ -28,6 +28,10 @@ class DataRequest:
         self.tile_name = tile_name
         self.dw_option = dw_option
     
+    def datetime_converter(obj):
+        if isinstance(obj, datetime.datetime):
+            return obj.__str__()
+
     def to_json(self, dic, sort = True):
         if 'img_plan' in dic:
             img_plan = dic['img_plan']
@@ -41,15 +45,15 @@ class DataRequest:
             img_sentinel = dic['img_sentinel']
             img_sentinel.save(self.path + 'img_sentinel.jpg', 'JPEG')
             dic['img_sentinel'] = self.path + 'img_sentinel.jpg'
-        if 'Heure du lever du soleil' in dic :
-            dic['Heure du lever du soleil'] = dic['Heure du lever du soleil'].isoformat()
-        if 'Heure du coucher du soleil' in dic :
-            dic['Heure du coucher du soleil'] = dic['Heure du coucher du soleil'].isoformat()
-        if 'Durée du jour' in dic :
-            dic['Durée du jour'] = dic['Durée du jour'].isoformat()
+        # if 'Heure du lever du soleil' in dic :
+        #     dic['Heure du lever du soleil'] = dic['Heure du lever du soleil'].isoformat()
+        # if 'Heure du coucher du soleil' in dic :
+        #     dic['Heure du coucher du soleil'] = dic['Heure du coucher du soleil'].isoformat()
+        # if 'Durée du jour' in dic :
+        #     dic['Durée du jour'] = dic['Durée du jour'].isoformat()
 
         with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
-            json.dump(dic, fp, sort_keys=sort, indent=4, default = str)
+            json.dump(dic, fp, sort_keys=sort, indent=4, default = datetime_converter)
 
     def point(self, coords, year : int, month : int = None, day : int = None):
         if day != None:
