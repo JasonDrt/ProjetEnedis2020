@@ -15,6 +15,7 @@ class DataRequest:
         self.path_to_sentinel = None
         self.nb_tile = None
         self.tile_name = None
+	self.dw_option = None
     
     
     def set_sentinel_param(self, user, pwd, width, nb_of_tile=1, path_to_sentinel='./', tile_name=None, dw_option='n'):
