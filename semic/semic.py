@@ -49,7 +49,7 @@ class DataRequest:
             dic['Durée du jour'] = dic['Durée du jour'].isoformat()
 
         with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
-            json.dump(dic, fp, sort_keys=sort, indent=4)
+            json.dump(dic, fp, sort_keys=sort, indent=4, default = str)
 
     def point(self, coords, year : int, month : int = None, day : int = None):
         if day != None:
