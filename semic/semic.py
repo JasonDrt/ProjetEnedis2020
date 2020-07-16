@@ -15,7 +15,7 @@ class DataRequest:
         self.path_to_sentinel = None
         self.nb_tile = None
         self.tile_name = None
-	self.dw_option = None
+        self.dw_option = None
     
     
     def set_sentinel_param(self, user, pwd, width, nb_of_tile=1, path_to_sentinel='./', tile_name=None, dw_option='n'):
@@ -25,7 +25,7 @@ class DataRequest:
         self.path_to_sentinel = path_to_sentinel
         self.nb_tile = nb_of_tile
         self.tile_name = tile_name
-	self.dw_option = dw_option
+        self.dw_option = dw_option
     
     def to_json(self, dic, sort = True):
         if 'img_plan' in dic:
