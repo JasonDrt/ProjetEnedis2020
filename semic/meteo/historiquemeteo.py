@@ -170,9 +170,9 @@ def get_historique_meteo(coord, year, month=None):
             res[key] = min(res[key])
         for key in mean_time:
             m = np.mean(list(map(lambda f: (((f.hour * 60) + f.minute) * 60) + f.second, res[key])))
-            res[key] = datetime.datetime.strptime(str(datetime.timedelta(seconds = m)), '%H:%M:%S').time()
+            res[key] = datetime.datetime.strptime(str(datetime.timedelta(seconds = m)), '%H:%M:%S').time().strftime('%H:%M:%S')
         
-    res = standardise_keys(res)
+    res = standardise_keys_hm(res)
 
     res['city'] = city
     return dict(res)
@@ -217,7 +217,7 @@ def scrap_historique_meteo(url):
         dic[key] = tokeep
     return dic
 
-def standardise_keys(dic):
+def standardise_keys_hm(dic):
     dic['avg_temp'] = dic.pop('Température moyenne (°C)')
     dic['max_temp'] = dic.pop('Température maximale (°C)')
     dic['min_temp'] = dic.pop('Température minimale (°C)')
