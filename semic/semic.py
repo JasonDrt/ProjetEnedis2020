@@ -1,5 +1,5 @@
 from semic.maps import get_plan
-from semic.meteo import get_historique_meteo, get_meteo, get_meteo_monthly, estimate_meteo_year, find_insee
+from semic.meteo import get_historique_meteo, get_meteo, get_meteo_monthly, estimate_meteo_year, find_insee, get_historique_meteo_day
 from semic.gps_info import get_elevation_fr, get_elevation, get_city, select_city_postal
 from semic.sentinelProcess import search_tile
 from semic.utils import center_of_line
@@ -57,10 +57,11 @@ class DataRequest:
 
     def point(self, coords, year : int, month : int = None, day : int = None):
         if day != None:
-            city, postal = select_city_postal(get_city(coords))
-            insee_code = find_insee(city, postal)
-            date = "{0:0=2d}".format(day) + '-' + "{0:0=2d}".format(month) + '-' + str(year)
-            weather = get_meteo(insee_code, date)
+            # city, postal = select_city_postal(get_city(coords))
+            # insee_code = find_insee(city, postal)
+            # date = "{0:0=2d}".format(day) + '-' + "{0:0=2d}".format(month) + '-' + str(year)
+            # weather = get_meteo(insee_code, date)
+            weather = get_historique_meteo_day(coords, year, month, day)
         else:
             weather = get_historique_meteo(coords, year, month)
         img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
@@ -92,10 +93,11 @@ class DataRequest:
     def line(self, coords, year : int, month : int = None, day : int = None):
         center = center_of_line(coords)
         if day != None:
-            city, postal = select_city_postal(get_city(center))
-            insee_code = find_insee(city, postal)
-            date = "{0:0=2d}".format(day) + '-' + "{0:0=2d}".format(month) + '-' + str(year)
-            weather = get_meteo(insee_code, date)
+            # city, postal = select_city_postal(get_city(center))
+            # insee_code = find_insee(city, postal)
+            # date = "{0:0=2d}".format(day) + '-' + "{0:0=2d}".format(month) + '-' + str(year)
+            # weather = get_meteo(insee_code, date)
+            weather = get_historique_meteo_day(center, year, month, day)
         else:
             weather = get_historique_meteo(center, year, month)
         img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
@@ -123,7 +125,7 @@ class DataRequest:
 
         return weather
 
-    def polyline(self, coords, date, dist):
+    def polyline(self, coords, dist, year, month = None, day = None):
         list_elevation = []
         for coord in coords:
             list_elevation.append(get_elevation_fr(coord))
@@ -132,7 +134,14 @@ class DataRequest:
         
         flat_list = [item for sublist in coords for item in sublist]
         center = center_of_line(flat_list)
-        weather = get_historique_meteo(center, date)
+        if day != None:
+            assert month != None, 'Month parameter must be filled in.'
+            weather = get_historique_meteo_day(center, year, month, day)
+        else: 
+            if month != None:
+                weather = get_historique_meteo(center, year, month)
+            else:
+                weather = get_historique_meteo(center, year)
 
         weather['img_plan'] = img_plan
         weather['img_sat'] = img_sat

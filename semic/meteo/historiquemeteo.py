@@ -95,6 +95,27 @@ def check_last_date(region_url, city_url, year, month = None):
     assert month == 0, 'No data available for any month for this year'
     return month
 
+def get_historique_meteo_day(coord, year, month, day):
+    address = get_city(coord)
+    city, postal = select_city_postal(address)
+    region_url = assign_old_state(postal[0:2])
+    city_url, city = check_city(coord, region_url, city)
+
+    now = datetime.datetime.now()
+    date = datetime.datetime(year = year, month = month, day = day)
+    date_l = datetime.datetime(year = 2010, month = 1, day = 1)
+    assert (date >= date_l) and (date < now), "The date must be between 01-01-2010 and " + str(now.strftime('%d-%m-%Y'))
+
+    m = '{0:0=2d}'.format(month)
+    d = '{0:0=2d}'.format(day)
+    url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}/{4}'
+    url = url.format(region_url, city_url, year, m, d)
+    res = scrap_historique_meteo(url)
+
+    res = standardise_keys_hm(res, day = True)
+
+    return res
+
 def get_historique_meteo(coord, year, month=None):
     """Documentation
     Parameters:
@@ -185,6 +206,7 @@ def scrap_historique_meteo(url):
         dic: dictionnary of the weather
     """
     page = requests.get(url)
+    assert page.status_code == 200, "No data available for this date"
     soup = BeautifulSoup(page.content, 'html.parser')
     tableau = soup.find_all('tbody')[0]
     keys = tableau.find_all('td', class_ = None)[:-1]
@@ -217,16 +239,20 @@ def scrap_historique_meteo(url):
         dic[key] = tokeep
     return dic
 
-def standardise_keys_hm(dic):
-    dic['avg_temp'] = dic.pop('Température moyenne (°C)')
+def standardise_keys_hm(dic, day = False):
+    if day == False:
+        dic['avg_temp'] = dic.pop('Température moyenne (°C)')
+        dic['record_max_temp'] = dic.pop('Température maximale record (°C)')
+        dic['record_min_temp'] = dic.pop('Température minimale record (°C)')
+        dic['avg_rainfall_per_day'] = dic.pop('Précipitations moyennes par jour (mm)')
+        dic['total_rainfall'] = dic.pop('Précipitations totales sur le mois (mm)')
+        dic['record_rainfall_day'] = dic.pop('Record de précipitations sur une journée (mm)')
+    else:
+        dic['rainfall'] = dic.pop('Précipitations (mm)')
+    
     dic['max_temp'] = dic.pop('Température maximale (°C)')
     dic['min_temp'] = dic.pop('Température minimale (°C)')
-    dic['record_max_temp'] = dic.pop('Température maximale record (°C)')
-    dic['record_min_temp'] = dic.pop('Température minimale record (°C)')
     dic['wind_speed'] = dic.pop('Vitesse du vent (km/h)')
-    dic['avg_rainfall_per_day'] = dic.pop('Précipitations moyennes par jour (mm)')
-    dic['total_rainfall'] = dic.pop('Précipitations totales sur le mois (mm)')
-    dic['record_rainfall_day'] = dic.pop('Record de précipitations sur une journée (mm)')
     dic['humidity'] = dic.pop('Humidité (%)')
     dic['visibility'] = dic.pop('Visibilité (km)')
     dic['cloud_coverage'] = dic.pop('Couverture nuageuse (%)')
