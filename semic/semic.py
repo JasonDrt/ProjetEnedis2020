@@ -55,7 +55,7 @@ class DataRequest:
         with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
             json.dump(dic, fp, sort_keys=sort, indent=4, default = str)
 
-    def point(self, coords, year : int, month : int = None, day : int = None, outs = ['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel']):
+    def point(self, coords, year : int, month : int = None, day : int = None, outputs = ['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel']):
         if day != None:                
             # city, postal = select_city_postal(get_city(coords))
             # insee_code = find_insee(city, postal)
@@ -64,20 +64,20 @@ class DataRequest:
             weather = get_historique_meteo_day(coords, year, month, day)
         else:
             weather = get_historique_meteo(coords, year, month)
-        unwanted = set(outs) - set(weather)
+        unwanted = set(outputs) - set(weather)
         for unwanted_key in unwanted:
             del weather[unwanted_key]
 
-        if 'img_plan' in outs:
+        if 'img_plan' in outputs:
             img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
             weather['img_plan'] = img_plan
-        if 'img_sat' in outs:
+        if 'img_sat' in outputs:
             img_sat = get_plan(coords, self.width, style = 'sat', width = self.size[0], height = self.size[1])
             weather['img_sat'] = img_sat
-        if 'elevation' in outs:
+        if 'elevation' in outputs:
             elevation = get_elevation_fr(coords)
             weather['elevation'] = elevation
-        if 'img_sentinel' in outs:
+        if 'img_sentinel' in outputs:
             assert (self.user != None) and (self.pwd != None), "Sentinel's user and pwd must be set to collect sentinel's data (with set_sentinel_param)"
             if day != None :
                 date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z-10DAYS', 
