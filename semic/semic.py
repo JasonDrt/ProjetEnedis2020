@@ -81,7 +81,7 @@ class DataRequest:
         if 'img_sentinel' in outputs:
             if (self.user == None) or (self.pwd == None):
                 warnings.warn("Sentinel's user and password must be set to collect sentinel's data (with set_sentinel_param)")
-                break
+                return weather
             if day != None :
                 date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z-10DAYS', 
                 str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z')
