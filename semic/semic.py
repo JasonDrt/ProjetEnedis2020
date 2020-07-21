@@ -78,7 +78,7 @@ class DataRequest:
             elevation = get_elevation_fr(coords)
             weather['elevation'] = elevation
         if 'img_sentinel' in outputs:
-            assert (self.user != None) and (self.pwd != None), "Sentinel's user and pwd must be set to collect sentinel's data (with set_sentinel_param)"
+            assert (self.user != None) and (self.pwd != None), "Sentinel's user and password must be set to collect sentinel's data (with set_sentinel_param)"
             if day != None :
                 date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z-10DAYS', 
                 str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z')
