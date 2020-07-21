@@ -95,6 +95,32 @@ def check_last_date(region_url, city_url, year, month = None):
     assert month == 0, 'No data available for any month for this year'
     return month
 
+def standardise_keys_hm(dic, day = False):
+    if day == False:
+        dic['avg_temp'] = dic.pop('Température moyenne (°C)')
+        dic['record_max_temp'] = dic.pop('Température maximale record (°C)')
+        dic['record_min_temp'] = dic.pop('Température minimale record (°C)')
+        dic['avg_rainfall_per_day'] = dic.pop('Précipitations moyennes par jour (mm)')
+        dic['rainfall'] = dic.pop('Précipitations totales sur le mois (mm)')
+        dic['record_rainfall_day'] = dic.pop('Record de précipitations sur une journée (mm)')
+    else:
+        dic['rainfall'] = dic.pop('Précipitations (mm)')
+    
+    dic['max_temp'] = dic.pop('Température maximale (°C)')
+    dic['min_temp'] = dic.pop('Température minimale (°C)')
+    dic['wind_speed'] = dic.pop('Vitesse du vent (km/h)')
+    dic['humidity'] = dic.pop('Humidité (%)')
+    dic['visibility'] = dic.pop('Visibilité (km)')
+    dic['cloud_coverage'] = dic.pop('Couverture nuageuse (%)')
+    dic['heat_index'] = dic.pop('Indice de chaleur')
+    dic['dew_point_temp'] = dic.pop('Point de rosée (°C)')
+    dic['pressure'] = dic.pop('Pression (hPa)')
+    dic['sunrise_time'] = dic.pop('Heure du lever du soleil')
+    dic['sunset_time'] = dic.pop('Heure du coucher du soleil')
+    dic['day_length'] = dic.pop('Durée du jour')
+
+    return dic
+
 def get_historique_meteo_day(coord, year, month, day):
     address = get_city(coord)
     city, postal = select_city_postal(address)
@@ -237,31 +263,5 @@ def scrap_historique_meteo(url):
             key = keys[i].get_text().strip()
         
         dic[key] = tokeep
-    return dic
-
-def standardise_keys_hm(dic, day = False):
-    if day == False:
-        dic['avg_temp'] = dic.pop('Température moyenne (°C)')
-        dic['record_max_temp'] = dic.pop('Température maximale record (°C)')
-        dic['record_min_temp'] = dic.pop('Température minimale record (°C)')
-        dic['avg_rainfall_per_day'] = dic.pop('Précipitations moyennes par jour (mm)')
-        dic['rainfall'] = dic.pop('Précipitations totales sur le mois (mm)')
-        dic['record_rainfall_day'] = dic.pop('Record de précipitations sur une journée (mm)')
-    else:
-        dic['rainfall'] = dic.pop('Précipitations (mm)')
-    
-    dic['max_temp'] = dic.pop('Température maximale (°C)')
-    dic['min_temp'] = dic.pop('Température minimale (°C)')
-    dic['wind_speed'] = dic.pop('Vitesse du vent (km/h)')
-    dic['humidity'] = dic.pop('Humidité (%)')
-    dic['visibility'] = dic.pop('Visibilité (km)')
-    dic['cloud_coverage'] = dic.pop('Couverture nuageuse (%)')
-    dic['heat_index'] = dic.pop('Indice de chaleur')
-    dic['dew_point_temp'] = dic.pop('Point de rosée (°C)')
-    dic['pressure'] = dic.pop('Pression (hPa)')
-    dic['sunrise_time'] = dic.pop('Heure du lever du soleil')
-    dic['sunset_time'] = dic.pop('Heure du coucher du soleil')
-    dic['day_length'] = dic.pop('Durée du jour')
-
     return dic
             
