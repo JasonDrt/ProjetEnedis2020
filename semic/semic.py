@@ -16,17 +16,17 @@ class DataRequest:
         self.path_to_sentinel = None
         self.nb_tile = None
         self.tile_name = None
-        self.dw_option = None
+        self.dl_option = None
     
     
-    def set_sentinel_param(self, user, pwd, width, nb_of_tile=1, path_to_sentinel='./', tile_name=None, dw_option='n'):
+    def set_sentinel_param(self, user, pwd, width, nb_of_tile=1, path_to_sentinel='./', tile_name=None, dl_option='n'):
         self.user = user
         self.pwd = pwd
         self.width = width
         self.path_to_sentinel = path_to_sentinel
         self.nb_tile = nb_of_tile
         self.tile_name = tile_name
-        self.dw_option = dw_option
+        self.dl_option = dl_option
     
     # def datetime_converter(obj):
     #     if isinstance(obj, datetime.datetime):
@@ -89,7 +89,7 @@ class DataRequest:
                 date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
                 str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
             img_sentinel = search_tile(self.user, self.pwd, date, coords, self.width, 
-                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dw_option)
+                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option)
             if img_sentinel != None :
                 weather['img_sentinel'] = img_sentinel
         
@@ -118,7 +118,7 @@ class DataRequest:
                 date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
                 str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
             img_sentinel = search_tile(self.user, self.pwd, date, center, self.width, 
-                                       self.nb_tile, self.path_to_sentinel, self.tile_name, self.dw_option)
+                                       self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option)
             if img_sentinel != None :
                 weather['img_sentinel'] = img_sentinel
         elevation = get_elevation_fr(coords)
