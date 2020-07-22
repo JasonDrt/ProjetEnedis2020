@@ -92,7 +92,8 @@ def check_last_date(region_url, city_url, year, month = None):
         url_test = url.format(region_url, city_url, year, month)
         page = requests.get(url_test)
         code = page.status_code
-    assert month == 0, 'No data available for any month for this year'
+    if month == -1:
+        raise Exception("No data available for any month for this year")
     return month
 
 def standardise_keys_hm(dic, day = False):
