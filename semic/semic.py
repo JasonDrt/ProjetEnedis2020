@@ -166,7 +166,24 @@ class DataRequest:
         if 'img_sat' in outputs:
             img_sat = get_plan(coords, dist, style = 'sat', width = self.size[0], height = self.size[1], poly = True)        
             weather['img_sat'] = img_sat
-
+        
+        if 'img_sentinel' in outputs:
+            if (self.user == None) or (self.pwd == None):
+                warnings.warn("Sentinel's user and password must be set to collect sentinel's data (with set_sentinel_param)")
+                return weather
+            if day != None :
+                date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"{0:0=2d}".format(month)+'-'+"{0:0=2d}".format(day)+'T00:00:00Z')
+            elif month != None :
+                date = date = (str(year)+'-'+"{0:0=2d}".format(month)+'-'+"01"+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"{0:0=2d}".format(month)+'-'+"01"+'T00:00:00Z')
+            else :
+                date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
+                str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
+            img_sentinel = search_tile(self.user, self.pwd, date, center, self.width, 
+                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option)
+            if img_sentinel != None :
+                weather['img_sentinel'] = img_sentinel
         return weather     
 
         
