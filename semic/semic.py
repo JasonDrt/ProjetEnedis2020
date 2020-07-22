@@ -68,7 +68,7 @@ class DataRequest:
         unwanted = set(outputs) - set(weather)
         for unwanted_key in unwanted:
             del weather[unwanted_key]
-
+        
         if 'img_plan' in outputs:
             img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
             weather['img_plan'] = img_plan
