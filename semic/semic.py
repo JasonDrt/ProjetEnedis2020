@@ -53,7 +53,7 @@ class DataRequest:
         # if 'Durée du jour' in dic :
         #     dic['Durée du jour'] = dic['Durée du jour'].isoformat()
 
-        with open(self.path + dic['Ville'] + '_' + '' + '.json', 'w') as fp:
+        with open(self.path + dic['city'] + '_' + '' + '.json', 'w') as fp:
             json.dump(dic, fp, sort_keys=sort, indent=4, default = str)
 
     def point(self, coords, year : int, month : int = None, day : int = None, outputs = ['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel']):
