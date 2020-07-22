@@ -57,7 +57,7 @@ class DataRequest:
             json.dump(dic, fp, sort_keys=sort, indent=4, default = str)
 
     def point(self, coords, year : int, month : int = None, day : int = None, outputs = ['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel']):
-        """if day != None:                
+        if day != None:                
             # city, postal = select_city_postal(get_city(coords))
             # insee_code = find_insee(city, postal)
             # date = "{0:0=2d}".format(day) + '-' + "{0:0=2d}".format(month) + '-' + str(year)
@@ -67,8 +67,8 @@ class DataRequest:
             weather = get_historique_meteo(coords, year, month)
         unwanted = set(outputs) - set(weather)
         for unwanted_key in unwanted:
-            del weather[unwanted_key]"""
-        weather = {}
+            del weather[unwanted_key]
+
         if 'img_plan' in outputs:
             img_plan = get_plan(coords, self.width, style = 'plan', width = self.size[0], height = self.size[1])
             weather['img_plan'] = img_plan
