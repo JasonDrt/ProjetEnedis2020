@@ -65,7 +65,7 @@ class DataRequest:
             weather = get_historique_meteo_day(coords, year, month, day)
         else:
             weather = get_historique_meteo(coords, year, month)
-        possible_keys = set('max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel')
+        possible_keys = set(['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel'])
         if len(set(outputs) - possible_keys) != 0:
             raise Exception("Wrong key(s) : " + str(set(outputs) - possible_keys))
         unwanted = set(weather) - set(outputs)
