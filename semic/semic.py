@@ -28,12 +28,8 @@ class DataRequest:
         self.nb_tile = nb_of_tile
         self.tile_name = tile_name
         self.dl_option = dl_option
-    
-    # def datetime_converter(obj):
-    #     if isinstance(obj, datetime.datetime):
-    #         return obj.__str__()
 
-    def to_json(self, dic, sort = True):
+    def to_json(self, dic, name : str = 'dictionnary', sort = True):
         if 'img_plan' in dic:
             img_plan = dic['img_plan']
             img_plan.save(self.path + 'img_plan.jpg', 'JPEG')
@@ -46,17 +42,11 @@ class DataRequest:
             img_sentinel = dic['img_sentinel']
             img_sentinel.save(self.path + 'img_sentinel.jpg', 'JPEG')
             dic['img_sentinel'] = self.path + 'img_sentinel.jpg'
-        # if 'Heure du lever du soleil' in dic :
-        #     dic['Heure du lever du soleil'] = dic['Heure du lever du soleil'].isoformat()
-        # if 'Heure du coucher du soleil' in dic :
-        #     dic['Heure du coucher du soleil'] = dic['Heure du coucher du soleil'].isoformat()
-        # if 'Durée du jour' in dic :
-        #     dic['Durée du jour'] = dic['Durée du jour'].isoformat()
 
-        with open(self.path + dic['city'] + '_' + '' + '.json', 'w') as fp:
+        with open(self.path + name + '.json', 'w') as fp:
             json.dump(dic, fp, sort_keys=sort, indent=4, default = str)
 
-    def point(self, coords, year : int, month : int = None, day : int = None, outputs = ['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel']):
+    def point(self, coords, year : int, month : int = None, day : int = None, outputs = ['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel', 'city']):
         if day != None:                
             # city, postal = select_city_postal(get_city(coords))
             # insee_code = find_insee(city, postal)
@@ -65,7 +55,7 @@ class DataRequest:
             weather = get_historique_meteo_day(coords, year, month, day)
         else:
             weather = get_historique_meteo(coords, year, month)
-        possible_keys = set(['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel'])
+        possible_keys = set(['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'visibility', 'cloud_coverage', 'heat_index', 'dew_point_temp', 'pressure', 'sunrise_time', 'sunset_time', 'day_length', 'rainfall', 'avg_rainfall_per_day', 'record_rainfall_day', 'img_plan', 'img_sat', 'elevation', 'img_sentinel', 'city'])
         if len(set(outputs) - possible_keys) != 0:
             raise Exception("Wrong key(s) : " + str(set(outputs) - possible_keys))
         unwanted = set(weather) - set(outputs)
