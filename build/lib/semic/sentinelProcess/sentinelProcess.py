@@ -143,7 +143,28 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
     else :
         #Download proposal
         dl_products(api, df_prod,option)
-        return(None)
+        if os.path.exists(p+df_prod['title'][0]+'.zip'):
+            with zipfile.ZipFile(p+df_prod['title'][0]+'.zip', 'r') as zip_ref:
+                zip_ref.extractall(p)
+
+            file_path = p+df_prod['title'][0]+'.SAFE/GRANULE/'
+            directories=[]
+            for paths, dirs, files in os.walk(file_path):
+                for d in dirs:
+                    directories.append(d)
+                for f in files :
+                    if 'TCI_10m' in f:
+                        filename = f
+            file_path = file_path+directories[0]+'/IMG_DATA/R10m/'+filename
+            band1, band2, band3 = tci_process(file_path,width,gps_coord)
+            img = np.zeros((band1.shape[0],band1.shape[1],3),dtype=np.uint8)
+            img[:,:,0] = band1
+            img[:,:,1] = band2
+            img[:,:,2] = band3
+            img_pil = Image.fromarray(img)
+            return(img_pil)
+        else :
+            return(None)
         
 def print_img(br,bg,bb,size,name):
     img = np.zeros((br.shape[0],br.shape[1],3))

@@ -86,13 +86,61 @@ def check_last_date(region_url, city_url, year, month = None):
     url_test = url.format(region_url, city_url, year, month)
     page = requests.get(url_test)
     code = page.status_code
-    while (code != 200) and int(month) > 0:
+    while (code != 200) and int(month) > -1:
         month = int(month) - 1
         month = "{0:02d}".format(month)
         url_test = url.format(region_url, city_url, year, month)
         page = requests.get(url_test)
         code = page.status_code
+    assert month == 0, 'No data available for any month for this year'
     return month
+
+def standardise_keys_hm(dic, day = False):
+    if day == False:
+        dic['avg_temp'] = dic.pop('Température moyenne (°C)')
+        dic['record_max_temp'] = dic.pop('Température maximale record (°C)')
+        dic['record_min_temp'] = dic.pop('Température minimale record (°C)')
+        dic['avg_rainfall_per_day'] = dic.pop('Précipitations moyennes par jour (mm)')
+        dic['rainfall'] = dic.pop('Précipitations totales sur le mois (mm)')
+        dic['record_rainfall_day'] = dic.pop('Record de précipitations sur une journée (mm)')
+    else:
+        dic['rainfall'] = dic.pop('Précipitations (mm)')
+    
+    dic['max_temp'] = dic.pop('Température maximale (°C)')
+    dic['min_temp'] = dic.pop('Température minimale (°C)')
+    dic['wind_speed'] = dic.pop('Vitesse du vent (km/h)')
+    dic['humidity'] = dic.pop('Humidité (%)')
+    dic['visibility'] = dic.pop('Visibilité (km)')
+    dic['cloud_coverage'] = dic.pop('Couverture nuageuse (%)')
+    dic['heat_index'] = dic.pop('Indice de chaleur')
+    dic['dew_point_temp'] = dic.pop('Point de rosée (°C)')
+    dic['pressure'] = dic.pop('Pression (hPa)')
+    dic['sunrise_time'] = dic.pop('Heure du lever du soleil')
+    dic['sunset_time'] = dic.pop('Heure du coucher du soleil')
+    dic['day_length'] = dic.pop('Durée du jour')
+
+    return dic
+
+def get_historique_meteo_day(coord, year, month, day):
+    address = get_city(coord)
+    city, postal = select_city_postal(address)
+    region_url = assign_old_state(postal[0:2])
+    city_url, city = check_city(coord, region_url, city)
+
+    now = datetime.datetime.now()
+    date = datetime.datetime(year = year, month = month, day = day)
+    date_l = datetime.datetime(year = 2010, month = 1, day = 1)
+    assert (date >= date_l) and (date < now), "The date must be between 01-01-2010 and " + str(now.strftime('%d-%m-%Y'))
+
+    m = '{0:0=2d}'.format(month)
+    d = '{0:0=2d}'.format(day)
+    url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}/{4}'
+    url = url.format(region_url, city_url, year, m, d)
+    res = scrap_historique_meteo(url)
+
+    res = standardise_keys_hm(res, day = True)
+
+    return res
 
 def get_historique_meteo(coord, year, month=None):
     """Documentation
@@ -169,9 +217,11 @@ def get_historique_meteo(coord, year, month=None):
             res[key] = min(res[key])
         for key in mean_time:
             m = np.mean(list(map(lambda f: (((f.hour * 60) + f.minute) * 60) + f.second, res[key])))
-            res[key] = datetime.datetime.strptime(str(datetime.timedelta(seconds = m)), '%H:%M:%S').time()
+            res[key] = datetime.datetime.strptime(str(datetime.timedelta(seconds = m)), '%H:%M:%S').time().strftime('%H:%M:%S')
+        
+    res = standardise_keys_hm(res)
 
-    res['Ville'] = city
+    res['city'] = city
     return dict(res)
 
 def scrap_historique_meteo(url):
@@ -182,6 +232,7 @@ def scrap_historique_meteo(url):
         dic: dictionnary of the weather
     """
     page = requests.get(url)
+    assert page.status_code == 200, "No data available for this date"
     soup = BeautifulSoup(page.content, 'html.parser')
     tableau = soup.find_all('tbody')[0]
     keys = tableau.find_all('td', class_ = None)[:-1]
@@ -213,5 +264,4 @@ def scrap_historique_meteo(url):
         
         dic[key] = tokeep
     return dic
-
-        
+            

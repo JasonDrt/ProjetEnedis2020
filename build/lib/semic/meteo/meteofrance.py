@@ -65,6 +65,9 @@ def get_meteo(insee, day):
             if i.isdigit() or i == '.':
                 tokeep += i
         dic[key] = float(tokeep)
+    
+    dic = standardise_keys_mf(dic, day = True)
+
     return dic
 
 def get_meteo_monthly(insee, month, year):
@@ -103,6 +106,8 @@ def get_meteo_monthly(insee, month, year):
     mean_d["Durée maximale d'ensoleillement"] = max(list_soleil)
     mean_d["Durée minimale d'ensoleillement"] = min(list_soleil)
     mean_d["Durée d'ensoleillement moyenne"] = sum(list_soleil) / len(list_soleil)
+
+    mean_d = standardise_keys_mf(mean_d)
 
     return mean_d
 
@@ -143,6 +148,26 @@ def estimate_meteo_year(insee, year):
     mean_d["Durée maximale d'ensoleillement"] = max(list_soleil)
     mean_d["Durée minimale d'ensoleillement"] = min(list_soleil)
     mean_d["Durée d'ensoleillement moyenne"] = sum(list_soleil) / len(list_soleil)
+
+    mean_d = standardise_keys_mf(mean_d)
     
     return mean_d
 
+def standardise_keys_mf(dic, day = False):
+    if day == False:
+        dic['max_temp'] = dic.pop("Température maximale de l'année")
+        dic['min_temp'] = dic.pop("Température minimale de l'année")
+        dic['avg_max_temp'] = dic.pop("Température maximale moyenne")
+        dic['avg_min_temp'] = dic.pop("Température minimale moyenne")
+        dic['max_rainfall'] = dic.pop("Hauteur maximale des précipitations")
+        dic['min_rainfall'] = dic.pop("Hauteur minimale des précipitations")
+        dic['avg_rainfall'] = dic.pop("Hauteur moyenne des précipitations")
+        dic['max_sunshine'] = dic.pop("Durée maximale d'ensoleillement")
+        dic['min_sunshine'] = dic.pop("Durée minimale d'ensoleillement")
+        dic['avg_sunshine'] = dic.pop("Durée d'ensoleillement moyenne")
+    else :
+        dic['min_temp'] = dic.pop('Température minimale de la journée')
+        dic['max_temp'] = dic.pop('Température maximale de la journée')
+        dic['sunshine'] = dic.pop("Durée d'ensoleillement de la journée")
+        dic['rainfall'] = dic.pop('Hauteur des précipitations')
+    return dic
