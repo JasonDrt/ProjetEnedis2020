@@ -8,6 +8,7 @@ import datetime
 from collections import defaultdict
 import numpy as np
 from semic.gps_info import get_city, select_city_postal
+from semic.utils import URL_HISTORIQUE_METEO_MONTH, URL_HISTORIQUE_METEO_DAY
 
 def assign_old_state(code):
     """Documentation
@@ -79,7 +80,7 @@ def check_city(coord, reg, city):
     return city_url, city
 
 def check_last_date(region_url, city_url, year, month = None):
-    url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}'
+    url = URL_HISTORIQUE_METEO_MONTH
     if month == None:
         month = datetime.datetime.now().month
         month = "{0:02d}".format(month)
@@ -135,7 +136,7 @@ def get_historique_meteo_day(coord, year, month, day):
 
     m = '{0:0=2d}'.format(month)
     d = '{0:0=2d}'.format(day)
-    url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}/{4}'
+    url = URL_HISTORIQUE_METEO_DAY
     url = url.format(region_url, city_url, year, m, d)
     res = scrap_historique_meteo(url)
 
@@ -171,7 +172,7 @@ def get_historique_meteo(coord, year, month=None):
         else:
             assert (int(month) >= 0) & (int(month) <=
                                         12), "The month must be between 0 and 12"
-        url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}'
+        url = URL_HISTORIQUE_METEO_MONTH
         url = url.format(region_url, city_url, year, month_2d)
         res = scrap_historique_meteo(url)
 
@@ -187,7 +188,7 @@ def get_historique_meteo(coord, year, month=None):
 
         for month in range(1, range_month):
             month_2d = "{0:0=2d}".format(month)
-            url = 'https://www.historique-meteo.net/france/{0}/{1}/{2}/{3}'
+            url = URL_HISTORIQUE_METEO_MONTH
             url = url.format(region_url, city_url, year, month_2d)
             dic = scrap_historique_meteo(url)
             for k, v in dic.items():

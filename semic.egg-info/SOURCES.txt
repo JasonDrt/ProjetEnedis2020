@@ -5,7 +5,6 @@ semic/__init__.py
 semic/code_insee.csv
 semic/historique_meteo.csv
 semic/semic.py
-semic/semicV2.py
 semic.egg-info/PKG-INFO
 semic.egg-info/SOURCES.txt
 semic.egg-info/dependency_links.txt
@@ -21,7 +20,6 @@ semic/meteo/meteofrance.py
 semic/sentinelProcess/__init__.py
 semic/sentinelProcess/sentinelAccess.py
 semic/sentinelProcess/sentinelProcess.py
-semic/sentinelProcess/sentinelProcessTest.py
 semic/utils/__init__.py
 semic/utils/constants.py
 semic/utils/utils.py

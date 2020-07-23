@@ -1,4 +1,5 @@
 from staticmap import StaticMap, CircleMarker, Line, Polygon
+from semic.utils import URL_TILE_PLAN, URL_TILE_SAT
 
 def get_plan(coord, dist, style='plan', width = None, height = None, poly = False):
     """Documentation
@@ -13,11 +14,11 @@ def get_plan(coord, dist, style='plan', width = None, height = None, poly = Fals
     """
     if style == 'plan':
         # zoom : [1; 20]
-        url_temp = 'http://c.tiles.wmflabs.org/osm-no-labels/{z}/{x}/{y}.png'
+        url_temp = URL_TILE_PLAN
     elif style == 'sat':
         # zoom : [1; 19]
         # bounds: [[-75, -180], [81, 180]]
-        url_temp = 'https://wxs.ign.fr/choisirgeoportail/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}'
+        url_temp = URL_TILE_SAT
     
     if width == None:
         width = dist

@@ -1,4 +1,5 @@
 import requests
+from semic.utils import URL_ELEVATION_ALL, URL_ELEVATION_FR
 
 def get_elevation_fr(coord : iter):
     if any(isinstance(el, (tuple, list)) for el in coord):
@@ -9,7 +10,7 @@ def get_elevation_fr(coord : iter):
     else:
         lon = coord[0]
         lat = coord[1]
-    query = 'http://wxs.ign.fr/choisirgeoportail/alti/rest/elevation.json?lon={0}&lat={1}&zonly=true'
+    query = URL_ELEVATION_FR
     q = query.format(lon, lat)
     r = requests.get(q)
     dic = r.json()
@@ -19,7 +20,7 @@ def get_elevation_fr(coord : iter):
 def get_elevation(coord):
     lon = coord[0]
     lat = coord[1]
-    url = "https://api.opentopodata.org/v1/eudem25m?locations={0},{1}"
+    url = URL_ELEVATION_ALL
     url = url.format(lat, lon)
     page = requests.get(url).json()
     if page['status'] == 'OK':

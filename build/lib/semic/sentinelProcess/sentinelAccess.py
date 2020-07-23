@@ -5,8 +5,9 @@ from datetime import date
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from semic.utils import URL_SENTINEL_API
 
-def connect_api(user,pw,link='https://scihub.copernicus.eu/dhus'):
+def connect_api(user,pw,link=URL_SENTINEL_API):
     return SentinelAPI(user,pw,link)
 
 def get_products(api, footprint, date, platform='Sentinel-2', prd_type='S2MSI2A', 

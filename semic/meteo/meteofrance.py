@@ -5,6 +5,7 @@ import datetime
 import calendar
 import pkgutil
 from io import StringIO
+from semic.utils import URL_METEO_FRANCE
 
 def find_insee(city, postal):
     """Documentation
@@ -33,7 +34,7 @@ def get_meteo(insee, day):
     """
     lieu_type = 'VILLE_FRANCE'
     
-    url = "http://www.meteofrance.com/climat/meteo-date-passee?lieuId={0}0&lieuType={1}&date={2}"
+    url = URL_METEO_FRANCE
     url = url.format(insee, lieu_type, day)
     page = requests.get(url)
     assert page.status_code == 200, "Error loading the webpage"
