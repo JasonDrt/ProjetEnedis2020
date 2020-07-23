@@ -39,6 +39,6 @@ setuptools.setup(
         'pyproj',
         'os',
         'zipfile',
-        'Pillow',
+        'Pillow'
     ],
 )
