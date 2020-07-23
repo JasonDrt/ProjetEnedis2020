@@ -16,4 +16,4 @@ rasterio
 pyproj
 os
 zipfile
-PIL
+Pillow
