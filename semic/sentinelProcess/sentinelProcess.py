@@ -101,7 +101,9 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
         df_prod = api.to_dataframe(products)
     #Check if the tile has already been downloaded and/or unziped.
     #Image process when it's possible.
-    if os.path.exists(p+df_prod['title'][0]+'.SAFE'):
+    if df_prod.empty :
+        return(None)
+    elif os.path.exists(p+df_prod['title'][0]+'.SAFE'):
         file_path = p+df_prod['title'][0]+'.SAFE/GRANULE/'
         directories=[]
         for paths, dirs, files in os.walk(file_path):
