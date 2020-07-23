@@ -29,7 +29,7 @@ class DataRequest:
         self.tile_name = tile_name
         self.dl_option = dl_option
 
-    def to_json(self, dic, name : str = 'dictionnary', sort = True):
+    def to_json(self, dic, name : str = 'dictionary', sort = True):
         dic_to_save = dic
         if 'img_plan' in dic:
             img_plan = dic['img_plan']
