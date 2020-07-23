@@ -22,4 +22,5 @@ semic/utils/utils.py
 semic_pkg_JasonDrt.egg-info/PKG-INFO
 semic_pkg_JasonDrt.egg-info/SOURCES.txt
 semic_pkg_JasonDrt.egg-info/dependency_links.txt
+semic_pkg_JasonDrt.egg-info/requires.txt
 semic_pkg_JasonDrt.egg-info/top_level.txt
