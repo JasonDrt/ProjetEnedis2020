@@ -33,15 +33,15 @@ class DataRequest:
         dic_to_save = dic
         if 'img_plan' in dic:
             img_plan = dic['img_plan']
-            img_plan.save(self.path + 'img_plan.jpg', 'JPEG')
+            img_plan.save(self.path + name + '_img_plan.jpg', 'JPEG')
             dic_to_save['img_plan'] = self.path + 'img_plan.jpg'
         if 'img_sat' in dic:
             img_sat = dic['img_sat']
-            img_sat.save(self.path + 'img_sat.jpg', 'JPEG')
+            img_sat.save(self.path + name + '_img_sat.jpg', 'JPEG')
             dic_to_save['img_sat'] = self.path + 'img_sat.jpg'
         if 'img_sentinel' in dic:
             img_sentinel = dic['img_sentinel']
-            img_sentinel.save(self.path + 'img_sentinel.jpg', 'JPEG')
+            img_sentinel.save(self.path + name + '_img_sentinel.jpg', 'JPEG')
             dic_to_save['img_sentinel'] = self.path + 'img_sentinel.jpg'
 
         with open(self.path + name + '.json', 'w') as fp:
