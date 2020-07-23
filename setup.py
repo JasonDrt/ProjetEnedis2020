@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name = "semic",
+    name = "semic_pkg-JasonDrt",
     version = "0.0.2",
     author = "JasonDrt, LesavoureyMael",
     author_email = "lesavoureym@gmail.com",
