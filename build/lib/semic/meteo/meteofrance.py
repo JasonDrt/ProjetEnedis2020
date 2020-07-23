@@ -33,8 +33,8 @@ def get_meteo(insee, day):
     """
     lieu_type = 'VILLE_FRANCE'
     
-    url = "http://www.meteofrance.com/climat/meteo-date-passee?lieuId=" + insee + "0&lieuType=" + lieu_type + "&date=" + day
-    
+    url = "http://www.meteofrance.com/climat/meteo-date-passee?lieuId={0}0&lieuType={1}&date={2}"
+    url = url.format(insee, lieu_type, day)
     page = requests.get(url)
     assert page.status_code == 200, "Error loading the webpage"
     

@@ -23,4 +23,5 @@ semic/sentinelProcess/sentinelAccess.py
 semic/sentinelProcess/sentinelProcess.py
 semic/sentinelProcess/sentinelProcessTest.py
 semic/utils/__init__.py
+semic/utils/constants.py
 semic/utils/utils.py
