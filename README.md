@@ -22,7 +22,7 @@ pip install semic
 from semic import DataRequest
 
 obj = DataRequest('./', (200,200))
-obj.set_sentinel_param(_user_, _password_,1)
+obj.set_sentinel_param( _user_ , _password_ ,1)
 ```
 
 | parameter | description |
@@ -66,29 +66,29 @@ dic = obj.point((1.8, 43.2),2019,2)
 
 
 List of available outputs :
-'max_temp' : maximum temperature in °C (d)
-'min_temp' : minimum temperature in °C (d)
-'avg_temp' : average temperature in °C (m/y)
-'record_max_temp' : highest temperature in °C (m/y)
-'record_min_temp' : lowest temperature in °C (m/y)
-'wind_speed' : average wind speed in km/h (d/m/y)
-'humidity' : humidity in % (d/m/y)
-'visibility' : visibility in km (d/m/y)
-'cloud_coverage' : cloud coverage in % (d/m/y)
-'heat_index' : heat index (d/m/y)
-'dew_point_temp' : dew point in °C (d/m/y)
-'pressure' : pressure in hPa (d/m/y)
-'sunrise_time' : sunrise time in hour:minute:second (d/m/y)
-'sunset_time' : sunset time in hour:minute:second (d/m/y)
-'day_length' : day length in hour:minute:second (d/m/y)
-'rainfall' : total rainfall in mm (d/m/y)
-'avg_rainfall_per_day' : average rainfall per day in mm (m/y)
-'record_rainfall_day' : highest rainfall in mm (m/y) 
-'img_plan' : PIL map image of the zone near the point (d/m/y)
-'img_sat' : PIL satellite image of the zone near the point (d/m/y)
-'elevation' : elevation of the point (d/m/y)
-'img_sentinel : PIL image of the zone taken in Sentinel2 data (d/m/y)
-'city' : Nearest city of the GPS point (d/m/y)
+- 'max_temp' : maximum temperature in °C (d)
+- 'min_temp' : minimum temperature in °C (d)
+- 'avg_temp' : average temperature in °C (m/y)
+- 'record_max_temp' : highest temperature in °C (m/y)
+- 'record_min_temp' : lowest temperature in °C (m/y)
+- 'wind_speed' : average wind speed in km/h (d/m/y)
+- 'humidity' : humidity in % (d/m/y)
+- 'visibility' : visibility in km (d/m/y)
+- 'cloud_coverage' : cloud coverage in % (d/m/y)
+- 'heat_index' : heat index (d/m/y)
+- 'dew_point_temp' : dew point in °C (d/m/y)
+- 'pressure' : pressure in hPa (d/m/y)
+- 'sunrise_time' : sunrise time in hour:minute:second (d/m/y)
+- 'sunset_time' : sunset time in hour:minute:second (d/m/y)
+- 'day_length' : day length in hour:minute:second (d/m/y)
+- 'rainfall' : total rainfall in mm (d/m/y)
+- 'avg_rainfall_per_day' : average rainfall per day in mm (m/y)
+- 'record_rainfall_day' : highest rainfall in mm (m/y) 
+- 'img_plan' : PIL map image of the zone near the point (d/m/y)
+- 'img_sat' : PIL satellite image of the zone near the point (d/m/y)
+- 'elevation' : elevation of the point (d/m/y)
+- 'img_sentinel : PIL image of the zone taken in Sentinel2 data (d/m/y)
+- 'city' : Nearest city of the GPS point (d/m/y)
 
 
 ```python
@@ -135,7 +135,7 @@ obj.to_json(dic, 'point')
 |:---------------|:---------------:|
 | dic (dict type) | Dictionary containing the to be save |
 | name (String) | Name of the .json file created |
-| sort (bool, default = True | Sort the keys in alphabetical order or not|
+| sort (bool, default = True) | Sort the keys in alphabetical order or not|
 
 
 
@@ -146,8 +146,8 @@ The function to_json will save the dictionary as a .json file into the folder in
 ```python
 from semic import DataRequest
 
-obj = DataRequest(‘./’,(200,200))
-obj.set_sentinel_param(*user*, *password*,1)
+obj = DataRequest('./',(200,200))
+obj.set_sentinel_param( _user_ , _password_ ,1)
 
 dic = obj.line([(1.88, 43.26), (1.85, 43.26)], 2019, 2, outputs=['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity'])
 
@@ -160,8 +160,8 @@ The only different parameter from _point_ to _line_ function is ‘coords’ whi
 ```python
 from semic import DataRequest
 
-obj = DataRequest(‘./’,(200,200))
-obj.set_sentinel_param(*user*, *password*,1)
+obj = DataRequest('./',(200,200))
+obj.set_sentinel_param( _user_ , _password_ ,1)
 
 dic = obj.polyline([[(1.88, 43.26), (1.85, 43.26)], [(1.86, 43.15), (1.86, 43.22)]], 2019, 2,23)
 
