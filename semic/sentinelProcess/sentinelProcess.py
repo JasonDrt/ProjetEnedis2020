@@ -90,12 +90,12 @@ def tci_process(path,width,gps_coord):
     band3 = band3[i_t:i_b,j_l:j_r]
     return(band1, band2, band3)
 
-def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n'):
+def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n', cc = (0,10)):
     #Connect to Sentinel2 API and search tiles.
     api = connect_api(user, pw)
     if tile_name == None:
         gps_coord_str = str(gps_coord[1])+', '+str(gps_coord[0])
-        df_prod = get_products(api, gps_coord_str, date, lim=l)
+        df_prod = get_products(api, gps_coord_str, date, cloudcover=cc, lim=l)
     else :
         products = api.query(filename=tile_name)
         df_prod = api.to_dataframe(products)
