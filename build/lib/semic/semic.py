@@ -18,9 +18,10 @@ class DataRequest:
         self.nb_tile = None
         self.tile_name = None
         self.dl_option = None
+	self.cloudcover = None
     
     
-    def set_sentinel_param(self, user, pwd, width, nb_of_tile=1, path_to_sentinel='./', tile_name=None, dl_option='n'):
+    def set_sentinel_param(self, user, pwd, width, nb_of_tile=1, path_to_sentinel='./', tile_name=None, dl_option='n', cc=(0,10)):
         self.user = user
         self.pwd = pwd
         self.width = width
@@ -28,6 +29,7 @@ class DataRequest:
         self.nb_tile = nb_of_tile
         self.tile_name = tile_name
         self.dl_option = dl_option
+	self.cloudcover = cc
 
     def to_json(self, dic, name : str = 'dictionary', sort = True):
         dic_to_save = dic
@@ -86,7 +88,7 @@ class DataRequest:
                 date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
                 str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
             img_sentinel = search_tile(self.user, self.pwd, date, coords, self.width, 
-                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option)
+                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option, self.cloudcover)
             if img_sentinel != None :
                 weather['img_sentinel'] = img_sentinel
         
@@ -133,7 +135,7 @@ class DataRequest:
                 date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
                 str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
             img_sentinel = search_tile(self.user, self.pwd, date, center, self.width, 
-                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option)
+                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option, self.cloudcover)
             if img_sentinel != None :
                 weather['img_sentinel'] = img_sentinel
         
@@ -181,7 +183,7 @@ class DataRequest:
                 date = date = (str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z-10DAYS', 
                 str(year)+'-'+"01"+'-'+"01"+'T00:00:00Z')
             img_sentinel = search_tile(self.user, self.pwd, date, center, self.width, 
-                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option)
+                                    self.nb_tile, self.path_to_sentinel, self.tile_name, self.dl_option, self.cloudcover)
             if img_sentinel != None :
                 weather['img_sentinel'] = img_sentinel
         return weather     
