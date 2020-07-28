@@ -139,6 +139,9 @@ def get_historique_meteo_day(coord, year, month, day):
     url = URL_HISTORIQUE_METEO_DAY
     url = url.format(region_url, city_url, year, m, d)
     res = scrap_historique_meteo(url)
+    res['Heure du lever du soleil'] = res['Heure du lever du soleil'].strftime('%H:%M:%S')
+    res['Heure du coucher du soleil'] = res['Heure du coucher du soleil'].strftime('%H:%M:%S')
+    res['Durée du jour'] = res['Durée du jour'].strftime('%H:%M:%S')
 
     res = standardise_keys_hm(res, day = True)
 
@@ -175,6 +178,9 @@ def get_historique_meteo(coord, year, month=None):
         url = URL_HISTORIQUE_METEO_MONTH
         url = url.format(region_url, city_url, year, month_2d)
         res = scrap_historique_meteo(url)
+        res['Heure du lever du soleil'] = res['Heure du lever du soleil'].strftime('%H:%M:%S')
+        res['Heure du coucher du soleil'] = res['Heure du coucher du soleil'].strftime('%H:%M:%S')
+        res['Durée du jour'] = res['Durée du jour'].strftime('%H:%M:%S')
 
     else:
         if year == now.year:
