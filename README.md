@@ -22,7 +22,6 @@ pip install semic
 from semic import DataRequest
 
 obj = DataRequest('./', (200,200))
-obj.set_sentinel_param( _user_ , _password_ ,1)
 ```
 
 | parameter | description |
@@ -34,7 +33,7 @@ obj.set_sentinel_param( _user_ , _password_ ,1)
 ### Set Sentinel2 parameters.
 
 ```python
-obj.set_sentinel_param(_user_, _password_,1)
+obj.set_sentinel_param(user, password,1)
 ```
 | parameter | description |
 |:---------------|:---------------:|
@@ -147,7 +146,7 @@ The function to_json will save the dictionary as a .json file into the folder in
 from semic import DataRequest
 
 obj = DataRequest('./',(200,200))
-obj.set_sentinel_param( _user_ , _password_ ,1)
+obj.set_sentinel_param(user , password, 1)
 
 dic = obj.line([(1.88, 43.26), (1.85, 43.26)], 2019, 2, outputs=['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity'])
 
@@ -161,7 +160,7 @@ The only different parameter from _point_ to _line_ function is ‘coords’ whi
 from semic import DataRequest
 
 obj = DataRequest('./',(200,200))
-obj.set_sentinel_param( _user_ , _password_ ,1)
+obj.set_sentinel_param(user , password ,1)
 
 dic = obj.polyline([[(1.88, 43.26), (1.85, 43.26)], [(1.86, 43.15), (1.86, 43.22)]], 2019, 2,23)
 
