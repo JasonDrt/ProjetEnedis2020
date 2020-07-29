@@ -106,24 +106,24 @@ obj.to_json(dic, 'point')
 The previous codes collect all the different data of February 2019 from a tuple (longitude, latitude) and store it in dic.\
 The function to_json will save the dictionary as a .json file into the folder indicated as parameter ('./') of the object DataRequest. Images of size (200,200) will be save in the same folder and only their path in the .json file.
 
-## Example
+## Examples
 
 ```python
 from semic import DataRequest
 
-obj = DataRequest('./',(200,200))
+obj = DataRequest('./', (200,200))
 obj.set_sentinel_param(user, password, 1)
 
 dic = obj.line([(1.88, 43.26), (1.85, 43.26)], 2019, 2, outputs=['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'img_sat'])
 print(dic)
 ```
-> {'avg_temp': 10.0,
-> 'record_max_temp': 23.0,
-> 'record_min_temp': 9.0,
-> 'max_temp': 14.0,
-> 'min_temp': 5.0,
-> 'wind_speed': 21.0,
-> 'humidity': 76.0,
+> {'avg_temp': 10.0,\
+> 'record_max_temp': 23.0,\
+> 'record_min_temp': 9.0,\
+> 'max_temp': 14.0,\
+> 'min_temp': 5.0,\
+> 'wind_speed': 21.0,\
+> 'humidity': 76.0,\
 > 'img_sat': <PIL.Image.Image image mode=RGB size=200x200 at 0x20C0F7D55F8>}
 ```python
 dic['img_sat'].show()
@@ -143,7 +143,7 @@ from semic import DataRequest
 obj = DataRequest('./',(200,200))
 obj.set_sentinel_param(user , password ,1)
 
-dic = obj.polyline([[(1.88, 43.26), (1.85, 43.26)], [(1.86, 43.15), (1.86, 43.22)]], 2019, 2,23)
+dic = obj.polyline([[(1.88, 43.26), (1.85, 43.26)], [(1.86, 43.15), (1.86, 43.22)]], 2019, 2, 23)
 
 obj.to_json(dic, 'line')
 ```
