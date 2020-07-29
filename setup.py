@@ -28,11 +28,9 @@ setuptools.setup(
         'pandas',
         'haversine',
         'datetime',
-        'collections',
         'calendar',
         'sentinelsat',
         'pyproj',
-        'os',
         'zipfile',
         'Pillow'
     ],
