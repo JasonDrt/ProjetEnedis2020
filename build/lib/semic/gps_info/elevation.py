@@ -2,6 +2,12 @@ import requests
 from semic.utils import URL_ELEVATION_ALL, URL_ELEVATION_FR
 
 def get_elevation_fr(coord : iter):
+    """
+    Input:
+        coord: list of tuples or tuple of GPS coordinates
+    Output:
+        elevation for each tuple
+    """
     if any(isinstance(el, (tuple, list)) for el in coord):
         lon = [i[0] for i in coord]
         lat = [i[1] for i in coord]
@@ -18,6 +24,12 @@ def get_elevation_fr(coord : iter):
     return list_elevations
 
 def get_elevation(coord):
+    """
+    Input:
+        coord: tuple of GPS coordinates
+    Output:
+        elevation for this tuple
+    """
     lon = coord[0]
     lat = coord[1]
     url = URL_ELEVATION_ALL

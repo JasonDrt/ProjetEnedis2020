@@ -1,10 +1,10 @@
 from geopy.geocoders import Nominatim
 
 def get_city(coord : iter):
-    """Documentation
-    Parameters: 
+    """
+    Input: 
         coord: tuple of gps coordinates (longitude, latitude)
-    Out:
+    Output:
         dictionnary of the address of the location
     """
     lat = coord[1]
@@ -15,10 +15,10 @@ def get_city(coord : iter):
     return dic
 
 def select_city_postal(address : dict):
-    """Documntation
-    Parameters:
+    """
+    Input:
         address: dictionnary of the address of a location
-    Out:
+    Output:
         name and post code of the location
     """
     if 'village' in address.keys():

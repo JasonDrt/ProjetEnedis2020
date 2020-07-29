@@ -8,11 +8,11 @@ from io import StringIO
 from semic.utils import URL_METEO_FRANCE
 
 def find_insee(city, postal):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         city: name of a city
         postal: post code of a city
-    Out:
+    Output:
         insee code of this city
     """
     byt = pkgutil.get_data("semic", "code_insee.csv")
@@ -25,11 +25,11 @@ def find_insee(city, postal):
     return code
 
 def get_meteo(insee, day):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         insee: insee code of a city
         day: day in format dd-mm-yy
-    Out:
+    Output:
         dictionnary of the weather
     """
     lieu_type = 'VILLE_FRANCE'
@@ -72,12 +72,12 @@ def get_meteo(insee, day):
     return dic
 
 def get_meteo_monthly(insee, month, year):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         insee: insee code of a city
         month: month in integer
         year: year in integer
-    Out:
+    Output:
         dictionnary of the weather for the month
     """
     nb_days = calendar.monthrange(year, month)[1]
@@ -113,11 +113,11 @@ def get_meteo_monthly(insee, month, year):
     return mean_d
 
 def estimate_meteo_year(insee, year):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         insee: insee code of a city
         year: year in integer
-    Out:
+    Output:
         dictionnary with the weather for the year
     """
     days = ['01', '06', '11', '16', '21', '26']
@@ -155,6 +155,13 @@ def estimate_meteo_year(insee, year):
     return mean_d
 
 def standardise_keys_mf(dic, day = False):
+    """
+    Inputs:
+        dic: dict of weather data with keys to standardise
+        day: boolean (True if dict contains data for a day, False otherwise)
+    Output:
+        same dict but with standardized keys
+    """
     if day == False:
         dic['max_temp'] = dic.pop("Température maximale de l'année")
         dic['min_temp'] = dic.pop("Température minimale de l'année")

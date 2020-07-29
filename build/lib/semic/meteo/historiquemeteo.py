@@ -11,11 +11,11 @@ from semic.gps_info import get_city, select_city_postal
 from semic.utils import URL_HISTORIQUE_METEO_MONTH, URL_HISTORIQUE_METEO_DAY
 
 def assign_old_state(code):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         code: first two digits of a postcode
-    Out:
-        reg: state for this city in historique_meteo website
+    Output:
+        state for this city in historique_meteo website
     """
     regions = {
         "alsace": ['67', '68'],
@@ -49,14 +49,14 @@ def assign_old_state(code):
     return 0
 
 def check_city(coord, reg, city):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         coord: tuple of gps coordinates (longitude, latitude)
         reg: state in historique_meteo website
         city: name of a city
-    Out:
-        city_url: url of the city in historique_meteo website
-        city: name of the city
+    Outputs:
+        - url of the city in historique_meteo website
+        - name of the city
     """
     lon = coord[0]
     lat = coord[1]
@@ -80,6 +80,15 @@ def check_city(coord, reg, city):
     return city_url, city
 
 def check_last_date(region_url, city_url, year, month = None):
+    """
+    Inputs:
+        region_url: state's url in historique_meteo website
+        city_url: city's url in historique_meteo website
+        year: year of the weather
+        month: month of the weather
+    Output:
+        last month available for the year in input or the same month in input if data is available
+    """
     url = URL_HISTORIQUE_METEO_MONTH
     if month == None:
         month = datetime.datetime.now().month
@@ -98,6 +107,13 @@ def check_last_date(region_url, city_url, year, month = None):
     return month
 
 def standardise_keys_hm(dic, day = False):
+    """
+    Inputs:
+        dic: dict of weather data with keys to standardise
+        day: boolean (True if dict contains data for a day, False otherwise)
+    Output:
+        same dict but with standardized keys
+    """
     if day == False:
         dic['avg_temp'] = dic.pop('Température moyenne (°C)')
         dic['record_max_temp'] = dic.pop('Température maximale record (°C)')
@@ -124,6 +140,15 @@ def standardise_keys_hm(dic, day = False):
     return dic
 
 def get_historique_meteo_day(coord, year, month, day):
+    """
+    Inputs:
+        coord: tuple of GPS coordinates (lon, lat)
+        year: year for the weather
+        month: month for the weather
+        day: day for the weather
+    Output:
+        dict with weather data
+    """
     address = get_city(coord)
     city, postal = select_city_postal(address)
     region_url = assign_old_state(postal[0:2])
@@ -148,13 +173,13 @@ def get_historique_meteo_day(coord, year, month, day):
     return res
 
 def get_historique_meteo(coord, year, month=None):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         coord: tuple of gps coordinates (longitude, latitude)
         year: year for the weather in integer
         month: month for the weather in integer
-    Out:
-        res: dictionnary of the weather
+    Output:
+        dictionnary with weather data
     """
     address = get_city(coord)
     city, postal = select_city_postal(address)
@@ -233,11 +258,11 @@ def get_historique_meteo(coord, year, month=None):
     return dict(res)
 
 def scrap_historique_meteo(url):
-    """Documentation
-    Parameters:
+    """
+    Input:
         url: url for historique_meteo website
-    Out:
-        dic: dictionnary of the weather
+    Output:
+        dictionnary of the weather
     """
     page = requests.get(url)
     assert page.status_code == 200, "No data available for this date"

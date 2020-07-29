@@ -2,14 +2,14 @@ from staticmap import StaticMap, CircleMarker, Line, Polygon
 from semic.utils import URL_TILE_PLAN, URL_TILE_SAT
 
 def get_plan(coord, dist, style='plan', width = None, height = None, poly = False):
-    """Documentation
-    Parameters:
+    """
+    Inputs:
         coord: tuple of gps coordinates (longitude, latitude)
         dist: distance to see around the gps coordinates
         style: style of the static map in (plan, sat)
         width: width of the image
         height: height of the image
-    Out:
+    Output:
         static map arround the gps coordinates
     """
     if style == 'plan':
