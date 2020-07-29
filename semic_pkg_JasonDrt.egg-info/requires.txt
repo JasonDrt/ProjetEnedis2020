@@ -4,13 +4,10 @@ staticmap
 bs4
 pandas
 haversine
-io
 datetime
 collections
-numpy
 calendar
 sentinelsat
-matplotlib
 pyproj
 os
 zipfile
