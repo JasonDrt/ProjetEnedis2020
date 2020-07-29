@@ -20,20 +20,26 @@ from PIL import Image
 from semic.sentinelProcess import connect_api, get_products, dl_products
      
 def tci_process(path,width,gps_coord):
-    #chargement de l'image
+    """Inputs : path : path of the image
+                width : size in km of the zone (square) you want to extract 
+                    arround the GPS point
+                gps_coord : tuple of int which are GPS coordinates (long, lat)
+      Outputs : The 3 bands (r,g,b) of the image after selecting the zone
+    """
+    #load image
     tci = rasterio.open(path, driver='JP2OpenJPEG') #colors
     band1 = tci.read(1)
     band2 = tci.read(2)
     band3 = tci.read(3)
     dim = band1.shape
     x_init,y_init = xy(tci.transform,0,0)
-    #conversion coordonnées gps vers référentiel de l'image
+    #convert GPS coordinates to the image reference system 
     inProj = Proj(init='epsg:4326')
     outProj = Proj(init=tci.crs)
     x_gps,y_gps = gps_coord
     x_im,y_im = transform(inProj,outProj,x_gps,y_gps)
     x_im,y_im = float(round(x_im)),float(round(y_im))
-    #recherche du point gps dans l'image
+    #search of gps point in image (as indexes)
     i,j = 0,0
     while abs(x_init - x_im) > 10 :
         j+=1
@@ -41,13 +47,14 @@ def tci_process(path,width,gps_coord):
     while abs(y_init - y_im) > 10 :
         i+=1
         y_init = xy(tci.transform,i,0)[1]
-    #sélection de la zone voulue
+    #Select the wanted zone (if the gps point is too close to image border, we
+    #duplicate the border to have the good size of the image)
     width = width*100
     if (i-(width/2) >= 0) and (i+(width/2) <= dim[0]) :
         i_t = round(i - width/2)
         i_b = round(i + width/2)
     elif i-(width/2) < 0 :
-        #on duplique la 1er ligne
+        #duplicate 1st line
         c1,c2,c3 = band1[0],band2[0],band3[0]
         for k in range(round(i-(width/2))):
             band1 = np.insert(band1,0,c1,axis=0)
@@ -56,7 +63,7 @@ def tci_process(path,width,gps_coord):
         i_t = 0
         i_b = i_t + width
     elif i+(width/2) > dim[0] :
-        #on duplique la dernière ligne
+        #duplicate last line
         c1,c2,c3 = band1[dim[0]-1],band2[dim[0]-1],band3[dim[0]-1]
         for k in range(round(i+(width/2))-dim[0]):
             band1 = np.insert(band1,dim[0],c1,axis=0)
@@ -68,7 +75,7 @@ def tci_process(path,width,gps_coord):
         j_l = round(j - width/2)
         j_r = round(j + width/2)
     elif j-(width/2) < 0 :
-        #on duplique la première colonne
+        #duplicate 1st column
         c1,c2,c3 = band1[:,0],band2[:,0],band3[:,0]
         for k in range(round(j-(width/2))):
             band1 = np.insert(band1,0,c1,axis=1)
@@ -77,7 +84,7 @@ def tci_process(path,width,gps_coord):
         j_l = 0
         j_r = j_l + width
     elif j+(width/2) > dim[1] :
-        #on duplique la dernière colonne
+        #duplicate last column
         c1,c2,c3 = band1[:,dim[1]-1], band2[:,dim[1]-1], band3[:,dim[1]-1]
         for k in range(round(j+(width/2))-dim[1]):
             band1 = np.insert(band1,dim[1],c1,axis=1)
@@ -91,6 +98,22 @@ def tci_process(path,width,gps_coord):
     return(band1, band2, band3)
 
 def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n', cc = (0,10)):
+    """Inputs : user : username of your SciHub account
+                pw : your password
+                date : tuple of (str or datetime) or str
+                     formats : yyyyMMdd ; yyyy-MM-ddThh:mm:ssZ ; NOW-/+<n>DAY(S)
+                gps_coord : tuple of int which are GPS coordinates (long, lat)
+                width : size in km of the zone (square) you want to extract 
+                    arround the GPS point
+                l : Limit number of tiles returned by the query, default = 1
+                path : path where you want to save Sentinel tiles
+                tile_name : Specific name of a tile, the query will be done for 
+                    this tile and wont take date into account
+                option : allows you to choose if you want ('y') or not ('n') to 
+                   download a tile. You can choose 'i' so there is an interaction
+                   to make your choice
+                cc : Percentage of cloud coverage, can be a tuple of int or a int
+       Output : PIL image of the zone around the gps coordinates when it is possible"""
     #Connect to Sentinel2 API and search tiles.
     api = connect_api(user, pw)
     if tile_name == None:
@@ -99,8 +122,7 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
     else :
         products = api.query(filename=tile_name)
         df_prod = api.to_dataframe(products)
-    #Check if the tile has already been downloaded and/or unziped.
-    #Image process when it's possible.
+    #Check if the tile has already been downloaded and unziped.
     if df_prod.empty :
         return(None)
     elif os.path.exists(p+df_prod['title'][0]+'.SAFE'):
@@ -113,6 +135,7 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
                 if 'TCI_10m' in f:
                     filename = f
         file_path = file_path+directories[0]+'/IMG_DATA/R10m/'+filename
+        #Image process
         band1, band2, band3 = tci_process(file_path,width,gps_coord)
         img = np.zeros((band1.shape[0],band1.shape[1],3),dtype=np.uint8)
         img[:,:,0] = band1
@@ -120,7 +143,7 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
         img[:,:,2] = band3
         img_pil = Image.fromarray(img)
         return(img_pil)
-    
+    #Check if the tile has already been downloaded but not unziped.
     elif os.path.exists(p+df_prod['title'][0]+'.zip'):
         with zipfile.ZipFile(p+df_prod['title'][0]+'.zip', 'r') as zip_ref:
             zip_ref.extractall(p)
@@ -134,6 +157,7 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
                 if 'TCI_10m' in f:
                     filename = f
         file_path = file_path+directories[0]+'/IMG_DATA/R10m/'+filename
+        #image process
         band1, band2, band3 = tci_process(file_path,width,gps_coord)
         img = np.zeros((band1.shape[0],band1.shape[1],3),dtype=np.uint8)
         img[:,:,0] = band1
@@ -143,8 +167,9 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
         return(img_pil)
     
     else :
-        #Download proposal
+        #The file is not downloaded so we do as 'option' parameter indicates
         dl_products(api, df_prod,option)
+        #We check if the download is done and do the image process
         if os.path.exists(p+df_prod['title'][0]+'.zip'):
             with zipfile.ZipFile(p+df_prod['title'][0]+'.zip', 'r') as zip_ref:
                 zip_ref.extractall(p)
@@ -168,16 +193,3 @@ def search_tile(user,pw,date,gps_coord,width,l=1,p='./',tile_name=None,option='n
         else :
             return(None)
         
-def print_img(br,bg,bb,size,name):
-    img = np.zeros((br.shape[0],br.shape[1],3))
-    img[:,:,0] = br/255
-    img[:,:,1] = bg/255
-    img[:,:,2] = bb/255
-    img = cv2.resize(img,size)
-    cv2.imshow(name,img)
-    cv2.waitKey()
-    cv2.destroyAllWindows()
-
-def _main_(user,pw,gps_coord,date,width,size,p='./',tile_name=None,name='SentinelImage'):
-    b1, b2, b3 = search_tile(user,pw,date,gps_coord,width,p=p,tile_name=tile_name)
-    print_img(b3,b2,b1,size,name=name)
