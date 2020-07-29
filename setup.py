@@ -28,7 +28,6 @@ setuptools.setup(
         'pandas',
         'haversine',
         'datetime',
-        'calendar',
         'sentinelsat',
         'pyproj',
         'zipfile',
