@@ -4,10 +4,10 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name = "semic_pkg-JasonDrt",
-    version = "0.0.2",
+    name = "semic",
+    version = "0.0.3",
     author = "JasonDrt, LesavoureyMael",
-    author_email = "lesavoureym@gmail.com",
+    author_email = "lesavoureym@gmail.com, jason.daurat@laposte.net",
     description = "Satellite, environmental and meteorologic information collect",
     long_description = long_description,
     long_description_content_type = "text/markdown",

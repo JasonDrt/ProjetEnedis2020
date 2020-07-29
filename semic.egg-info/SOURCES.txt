@@ -8,6 +8,7 @@ semic/semic.py
 semic.egg-info/PKG-INFO
 semic.egg-info/SOURCES.txt
 semic.egg-info/dependency_links.txt
+semic.egg-info/requires.txt
 semic.egg-info/top_level.txt
 semic/gps_info/__init__.py
 semic/gps_info/elevation.py
