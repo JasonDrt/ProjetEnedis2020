@@ -4,10 +4,10 @@ Semic (Satellite Environmental and Meteorological Information Collect ) is a Pyt
 
 ## Installation
 
-If you want to collect Sentinel2 image data you will need to install :
-rasterio (https://rasterio.readthedocs.io/en/latest/installation.html)
- OpenJPEG (https://www.openjpeg.org/)
-We invite you to follow the official installation guides. 
+If you want to collect Sentinel2 image data you will need to install :\
+* rasterio (https://rasterio.readthedocs.io/en/latest/installation.html)\
+* OpenJPEG (https://www.openjpeg.org/)\
+We invite you to follow the official installation guides.\ 
 You will also need a valid SciHub-Copernicus free account, you can create it at : https://scihub.copernicus.eu/dhus/#/self-registration
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install semic.
@@ -26,25 +26,25 @@ obj = DataRequest('./', (200,200))
 
 | parameter | description |
 |:---------------|:---------------:|
-| path_to_folder | The path where you will save the data (type : string) |
-| size_img | The size of returned images (type : tuple of int) |
+| path_to_folder (str) | The path where you will save the data |
+| size_img (tuple of int) | The size of returned images |
 
 
 ### Set Sentinel2 parameters.
 
 ```python
-obj.set_sentinel_param(user, password,1)
+obj.set_sentinel_param(user, password, 1)
 ```
 | parameter | description |
 |:---------------|:---------------:|
-| user (String) | Username of Sentinel account |
-| pwd (String) | Password of Sentinel account |
+| user (str) | Username of Sentinel account |
+| pwd (str) | Password of Sentinel account |
 | width (int) | Size in km of the zone (a square) you want to capture around the GPS coord |
 | nb_of_tile (int, default = 1) | The number max of tiles a sentinel query will return |
-| path_to_sentinel (String, default = './') | Path where Sentinel2 tiles will be downloaded |
-| tile_name (String, default = None) | Sentinel query with the specific name of a tile |
-| dl_option (String, default = 'n') | Can be 'y' or 'i'. If you find a tile that has not been already downloaded you can choose if you want to do it (y) or not (n) or his you want to interact and choose later (i) |
-| cloudcover (Tuple, default = (0,10)) | Cloudcover percentage for Sentinel images |
+| path_to_sentinel (str, default = './') | Path where Sentinel2 tiles will be downloaded |
+| tile_name (str, default = None) | Sentinel query with the specific name of a tile |
+| dl_option (str, default = 'n') | Can be 'y' or 'i'. If you find a tile that has not been already downloaded you can choose if you want to do it (y) or not (n) or his you want to interact and choose later (i) |
+| cloudcover (tuple, default = (0,10)) | Cloudcover percentage for Sentinel images |
 
 If you want to do the process without Sentinel2 data you just don’t set its parameters.
 
@@ -52,16 +52,16 @@ If you want to do the process without Sentinel2 data you just don’t set its pa
 ### Search data from GPS coordinates and date
 
 ```python
-dic = obj.point((1.8, 43.2),2019,2)
+dic = obj.point((1.8, 43.2), 2019, 2)
 ```
 
 | parameter | description |
 |:---------------|:---------------:|
-| coords | tuple of a GPS coordinates (longitude, latitude) |
-| year | int of the year for the weather |
-| month | int of the month for the weather (optional) |
-| day | int of the day for the weather (optional) |
-| outputs | list of the outputs wanted (optional) |
+| coords (tuple) | GPS coordinates (longitude, latitude) |
+| year (int) | Year for the weather |
+| month (int, default = None) | Month for the weather |
+| day (int, default = None) | Day for the weather |
+| outputs (list, default = all the possible outputs) | outputs wanted |
 
 
 List of available outputs :
@@ -89,41 +89,6 @@ List of available outputs :
 - 'img_sentinel : PIL image of the zone taken in Sentinel2 data (d/m/y)
 - 'city' : Nearest city of the GPS point (d/m/y)
 
-
-```python
-print(dic)
-```
-> {'avg_temp': 10.0,\
-> 'record_max_temp': 23.0,\
-> 'record_min_temp': 9.0,\
-> 'avg_rainfall_per_day': 2.0,\
-> 'rainfall': 30.0,\
-> 'record_rainfall_day': 16.0,\
-> 'max_temp': 14.0,\
-> 'min_temp': 5.0,\
-> 'wind_speed': 21.0,\
-> 'humidity': 76.0,\
-> 'visibility': 11.0,\
-> 'cloud_coverage': 32.0,\
-> 'heat_index': 14.0,\
-> 'dew_point_temp': 6.0,\
-> 'pressure': 1027.0,\
-> 'sunrise_time': datetime.time(8, 8),\
-> 'sunset_time': datetime.time(18, 39),\
-> 'day_length': datetime.time(10, 31),\
-> 'city': 'castelnaudary',\
-> 'img_plan': <PIL.Image.Image image mode=RGB size=200x200 at 0x290A2E253C8>,\
-> 'img_sat': <PIL.Image.Image image mode=RGB size=200x200 at 0x290A2C74080>,\
-> 'elevation': [309.93]}
-
-
-
-```python
-print(dic['img_sat'])
-```
-![img_sat](./images/img_sat.png?raw=true "Satellite image")
-
-
 ### Save data
 
 ```python
@@ -132,8 +97,8 @@ obj.to_json(dic, 'point')
 
 | parameter | description |
 |:---------------|:---------------:|
-| dic (dict type) | Dictionary containing the to be save |
-| name (String) | Name of the .json file created |
+| dic (dict) | Dictionary containing the to be save |
+| name (str) | Name of the .json file created |
 | sort (bool, default = True) | Sort the keys in alphabetical order or not|
 
 
@@ -141,15 +106,31 @@ obj.to_json(dic, 'point')
 The previous codes collect all the different data of February 2019 from a tuple (longitude, latitude) and store it in dic.\
 The function to_json will save the dictionary as a .json file into the folder indicated as parameter ('./') of the object DataRequest. Images of size (200,200) will be save in the same folder and only their path in the .json file.
 
+## Example
 
 ```python
 from semic import DataRequest
 
 obj = DataRequest('./',(200,200))
-obj.set_sentinel_param(user , password, 1)
+obj.set_sentinel_param(user, password, 1)
 
-dic = obj.line([(1.88, 43.26), (1.85, 43.26)], 2019, 2, outputs=['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity'])
+dic = obj.line([(1.88, 43.26), (1.85, 43.26)], 2019, 2, outputs=['max_temp', 'min_temp', 'avg_temp', 'record_max_temp', 'record_min_temp', 'wind_speed', 'humidity', 'img_sat'])
+print(dic)
+```
+> {'avg_temp': 10.0,
+> 'record_max_temp': 23.0,
+> 'record_min_temp': 9.0,
+> 'max_temp': 14.0,
+> 'min_temp': 5.0,
+> 'wind_speed': 21.0,
+> 'humidity': 76.0,
+> 'img_sat': <PIL.Image.Image image mode=RGB size=200x200 at 0x20C0F7D55F8>}
+```python
+dic['img_sat'].show()
+```
+![img_sat](./images/img_sat.png?raw=true "Satellite image")
 
+```python
 obj.to_json(dic, 'line')
 ```
 
