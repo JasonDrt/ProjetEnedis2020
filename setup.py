@@ -30,7 +30,6 @@ setuptools.setup(
         'datetime',
         'sentinelsat',
         'pyproj',
-        'zipfile',
         'Pillow'
     ],
 )

@@ -7,5 +7,4 @@ haversine
 datetime
 sentinelsat
 pyproj
-zipfile
 Pillow
