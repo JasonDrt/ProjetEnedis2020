@@ -145,7 +145,7 @@ obj.set_sentinel_param(user , password ,1)
 
 dic = obj.polyline([[(1.88, 43.26), (1.85, 43.26)], [(1.86, 43.15), (1.86, 43.22)]], 2019, 2, 23)
 
-obj.to_json(dic, 'line')
+obj.to_json(dic, 'polyline')
 ```
 This will collect data of 23rd Feb. 2019 from a list of list of GPS coordinates.
 The parameters are once again the same except ‘coords’ which is now a list of list of coordinates.
