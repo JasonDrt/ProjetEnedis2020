@@ -122,7 +122,8 @@ def standardise_keys_hm(dic, day = False):
         dic['rainfall'] = dic.pop('Précipitations totales sur le mois (mm)')
         dic['record_rainfall_day'] = dic.pop('Record de précipitations sur une journée (mm)')
     else:
-        dic['rainfall'] = dic.pop('Précipitations (mm)')
+        if 'Précipitations (mm)' in dic:
+            dic['rainfall'] = dic.pop('Précipitations (mm)')
     
     dic['max_temp'] = dic.pop('Température maximale (°C)')
     dic['min_temp'] = dic.pop('Température minimale (°C)')
