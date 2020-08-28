@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name = "semic",
-    version = "0.0.4",
+    version = "0.0.5",
     author = "JasonDrt, LesavoureyMael",
     author_email = "lesavoureym@gmail.com, jason.daurat@laposte.net",
     description = "Satellite, environmental and meteorologic information collect",
